@@ -39,6 +39,7 @@ export class Loginservice {
 
   // Hay sesión si existe un token y todavía no venció
   estaLogueado(): boolean {
+    if (!environment.seguridad) return true//agregado por mientras
     const token = this.getToken()
     if (!token) return false
     const payload = this.leerPayload(token)
@@ -51,6 +52,7 @@ export class Loginservice {
 
   // Los roles vienen en el claim "roles" del JWT, ej: "ROLE_ADMIN"
   esAdmin(): boolean {
+    if (!environment.seguridad) return true//agregado por mientras
     const token = this.getToken()
     if (!token) return false
     const roles: string = this.leerPayload(token)?.roles ?? ''
