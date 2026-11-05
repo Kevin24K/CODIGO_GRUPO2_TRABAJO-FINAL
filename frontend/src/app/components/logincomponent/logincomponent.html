@@ -1,0 +1,43 @@
+<div class="login-fondo">
+    <mat-card class="login-card">
+        <div class="login-logo">
+            <mat-icon>travel_explore</mat-icon>
+        </div>
+        <h1>Lost &amp; Found IA</h1>
+        <p class="subtitulo">Objetos perdidos y encontrados del campus</p>
+
+        <form [formGroup]="form" (ngSubmit)="ingresar()">
+            <mat-form-field appearance="outline" class="campo">
+                <mat-label>Correo</mat-label>
+                <input matInput formControlName="correo" type="email" autocomplete="username">
+                <mat-icon matPrefix>mail</mat-icon>
+                @if (form.get('correo')?.hasError('required')) {
+                    <mat-error>El correo es obligatorio</mat-error>
+                } @else if (form.get('correo')?.hasError('email')) {
+                    <mat-error>Formato de correo no válido</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="campo">
+                <mat-label>Contraseña</mat-label>
+                <input matInput formControlName="contrasena" [type]="verContrasena() ? 'text' : 'password'" autocomplete="current-password">
+                <mat-icon matPrefix>lock</mat-icon>
+                <button matIconButton matSuffix type="button" (click)="verContrasena.set(!verContrasena())"
+                    [attr.aria-label]="verContrasena() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                    <mat-icon>{{ verContrasena() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                @if (form.get('contrasena')?.hasError('required')) {
+                    <mat-error>La contraseña es obligatoria</mat-error>
+                }
+            </mat-form-field>
+
+            @if (mensaje()) {
+                <p class="error">{{ mensaje() }}</p>
+            }
+
+            <button matButton="filled" type="submit" class="btn-ingresar" [disabled]="cargando()">
+                {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
+            </button>
+        </form>
+    </mat-card>
+</div>

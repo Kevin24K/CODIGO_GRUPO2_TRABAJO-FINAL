@@ -1,0 +1,42 @@
+<mat-toolbar>
+    <button matIconButton routerLink="/" aria-label="Inicio">
+        <mat-icon>home</mat-icon>
+    </button>
+    <span class="marca">Lost &amp; Found IA</span>
+
+    <button matButton [matMenuTriggerFor]="menuCategoria">Categorías</button>
+    <mat-menu #menuCategoria="matMenu">
+        <button mat-menu-item routerLink="/categorias/listar"><mat-icon>list</mat-icon>Listar</button>
+        <button mat-menu-item routerLink="/categorias/insertar"><mat-icon>add</mat-icon>Registrar</button>
+    </mat-menu>
+
+    <button matButton [matMenuTriggerFor]="menuObjeto">Objetos</button>
+    <mat-menu #menuObjeto="matMenu">
+        <button mat-menu-item routerLink="/objetos/listar"><mat-icon>list</mat-icon>Listar</button>
+        <button mat-menu-item routerLink="/objetos/insertar"><mat-icon>add</mat-icon>Registrar</button>
+    </mat-menu>
+
+    <button matButton [matMenuTriggerFor]="menuReporte">Reportes</button>
+    <mat-menu #menuReporte="matMenu">
+        <button mat-menu-item routerLink="/reportes/listar"><mat-icon>list</mat-icon>Listar</button>
+        <button mat-menu-item routerLink="/reportes/insertar"><mat-icon>add</mat-icon>Registrar</button>
+    </mat-menu>
+
+    @if (lS.esAdmin()) {
+        <button matButton [matMenuTriggerFor]="menuUsuario">Usuarios</button>
+        <mat-menu #menuUsuario="matMenu">
+            <button mat-menu-item routerLink="/usuarios/listar"><mat-icon>list</mat-icon>Listar</button>
+            <button mat-menu-item routerLink="/usuarios/insertar"><mat-icon>add</mat-icon>Registrar</button>
+        </mat-menu>
+    }
+
+    <span class="espacio"></span>
+
+    <button matButton [matMenuTriggerFor]="menuCuenta" class="cuenta">
+        <mat-icon>account_circle</mat-icon>
+        <span class="correo">{{ lS.getCorreo() }}</span>
+    </button>
+    <mat-menu #menuCuenta="matMenu">
+        <button mat-menu-item (click)="cerrarSesion()"><mat-icon>logout</mat-icon>Cerrar sesión</button>
+    </mat-menu>
+</mat-toolbar>

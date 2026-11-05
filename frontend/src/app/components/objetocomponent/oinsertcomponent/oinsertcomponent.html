@@ -1,0 +1,70 @@
+<div class="page">
+    <div class="page-header">
+        <h2><mat-icon>inventory_2</mat-icon> Registrar Objeto</h2>
+    </div>
+
+    <mat-card class="form-card">
+        <mat-card-content>
+            <form [formGroup]="form" (ngSubmit)="registrar()">
+                <div class="form-grid">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nombre del objeto</mat-label>
+                        <input matInput formControlName="nombreObjeto" placeholder="Ej: Mochila">
+                        @if (form.get('nombreObjeto')?.hasError('required')) {
+                            <mat-error>El nombre es obligatorio</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Categoría</mat-label>
+                        <mat-select formControlName="idCategoria">
+                            @for (c of categorias(); track c.idCategoria) {
+                                <mat-option [value]="c.idCategoria">{{ c.nombreCategoria }}</mat-option>
+                            }
+                        </mat-select>
+                        @if (categorias().length === 0) {
+                            <mat-hint>Primero registra una categoría activa</mat-hint>
+                        }
+                        @if (form.get('idCategoria')?.hasError('required')) {
+                            <mat-error>Elige una categoría</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Color</mat-label>
+                        <input matInput formControlName="colorObjeto" placeholder="Ej: Negro">
+                        @if (form.get('colorObjeto')?.hasError('required')) {
+                            <mat-error>El color es obligatorio</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Marca</mat-label>
+                        <input matInput formControlName="marcaObjeto" placeholder="Ej: Totto">
+                        @if (form.get('marcaObjeto')?.hasError('required')) {
+                            <mat-error>La marca es obligatoria</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full">
+                        <mat-label>Descripción</mat-label>
+                        <textarea matInput formControlName="descripcionObjeto" rows="3"
+                            placeholder="Detalles que ayuden a identificarlo"></textarea>
+                        @if (form.get('descripcionObjeto')?.hasError('required')) {
+                            <mat-error>La descripción es obligatoria</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-slide-toggle formControlName="activoObjeto" class="full">Objeto activo</mat-slide-toggle>
+                </div>
+
+                <div class="form-acciones">
+                    <a matButton routerLink="/objetos/listar">Cancelar</a>
+                    <button matButton="filled" type="submit" [disabled]="guardando()">
+                        <mat-icon>save</mat-icon> Registrar
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

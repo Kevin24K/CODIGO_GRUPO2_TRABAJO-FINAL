@@ -1,0 +1,34 @@
+<app-menucomponent></app-menucomponent>
+
+<div class="page">
+    <div class="bienvenida">
+        <h1>Lost &amp; Found IA</h1>
+        <p>Sistema de reporte y búsqueda de objetos perdidos y encontrados en el campus universitario</p>
+        <p class="curso">Curso de Arquitectura de Aplicaciones Web — Grupo 2</p>
+    </div>
+
+    <div class="accesos">
+        <a mat-card class="acceso" routerLink="/categorias/listar">
+            <mat-icon>category</mat-icon>
+            <h3>Categorías</h3>
+            <p>Tipos de objetos: electrónicos, documentos, ropa...</p>
+        </a>
+        <a mat-card class="acceso" routerLink="/objetos/listar">
+            <mat-icon>inventory_2</mat-icon>
+            <h3>Objetos</h3>
+            <p>Objetos registrados con su categoría</p>
+        </a>
+        <a mat-card class="acceso" routerLink="/reportes/listar">
+            <mat-icon>assignment</mat-icon>
+            <h3>Reportes</h3>
+            <p>Reportes de objetos perdidos y encontrados</p>
+        </a>
+        @if (lS.esAdmin()) {
+            <a mat-card class="acceso" routerLink="/usuarios/listar">
+                <mat-icon>group</mat-icon>
+                <h3>Usuarios</h3>
+                <p>Usuarios del sistema y sus roles</p>
+            </a>
+        }
+    </div>
+</div>
