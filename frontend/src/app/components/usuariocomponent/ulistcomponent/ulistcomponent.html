@@ -1,0 +1,60 @@
+<div class="page">
+    <div class="page-header">
+        <h2><mat-icon>group</mat-icon> Lista de Usuarios</h2>
+        <a matButton="filled" routerLink="/usuarios/insertar"><mat-icon>person_add</mat-icon> Registrar usuario</a>
+    </div>
+
+    <div class="tabla-wrap">
+        <table mat-table [dataSource]="dataSource" class="tabla">
+
+            <ng-container matColumnDef="c1">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.idUsuario}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c2">
+                <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                <td mat-cell *matCellDef="let element"> <strong>{{element.nombre}} {{element.apellido}}</strong> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c3">
+                <th mat-header-cell *matHeaderCellDef> Correo </th>
+                <td mat-cell *matCellDef="let element"> {{element.correo}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c4">
+                <th mat-header-cell *matHeaderCellDef> Rol </th>
+                <td mat-cell *matCellDef="let element"> <span class="chip chip-neutro">{{element.nombreRol}}</span> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c5">
+                <th mat-header-cell *matHeaderCellDef> Fecha de registro </th>
+                <td mat-cell *matCellDef="let element"> {{element.fechaRegistro | date:'dd/MM/yyyy HH:mm'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c6">
+                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                <td mat-cell *matCellDef="let element">
+                    <span class="chip" [class.chip-ok]="element.activo" [class.chip-no]="!element.activo">
+                        {{element.activo ? 'Activo' : 'Inactivo'}}
+                    </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c7">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let element">
+                    <button matIconButton class="btn-eliminar" (click)="eliminarUsuario(element)" aria-label="Eliminar usuario">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="sin-datos" [attr.colspan]="displayedColumns.length">No hay usuarios registrados</td>
+            </tr>
+        </table>
+    </div>
+</div>
