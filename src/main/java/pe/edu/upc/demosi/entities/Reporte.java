@@ -27,6 +27,9 @@ public class Reporte {
     @Column(name = "fecha_actualizacion_reporte")
     private LocalDateTime fechaActualizacionR;
 
+    @Column(name = "activo", nullable = false)
+    private Boolean activo = true; // Le ponemos true para que al crearse sea activo por defecto
+
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
@@ -49,13 +52,14 @@ public class Reporte {
     public Reporte() {
     }
 
-    public Reporte(Long idReporte, String tipoReporte, LocalDate fechaeventoR, LocalTime horaEventoR, LocalDateTime fechaCreacion, LocalDateTime fechaActualizacionR, Usuario usuario, Objeto objeto, EstadoReporte estadoReporte, List<Coincidencia> coincidenciasComoPerdido, List<Coincidencia> coincidenciasComoEncontrado) {
+    public Reporte(Long idReporte, String tipoReporte, LocalDate fechaeventoR, LocalTime horaEventoR, LocalDateTime fechaCreacion, LocalDateTime fechaActualizacionR, Boolean activo, Usuario usuario, Objeto objeto, EstadoReporte estadoReporte, List<Coincidencia> coincidenciasComoPerdido, List<Coincidencia> coincidenciasComoEncontrado) {
         this.idReporte = idReporte;
         this.tipoReporte = tipoReporte;
         this.fechaeventoR = fechaeventoR;
         this.horaEventoR = horaEventoR;
         this.fechaCreacion = fechaCreacion;
         this.fechaActualizacionR = fechaActualizacionR;
+        this.activo = activo;
         this.usuario = usuario;
         this.objeto = objeto;
         this.estadoReporte = estadoReporte;
@@ -109,6 +113,14 @@ public class Reporte {
 
     public void setFechaActualizacionR(LocalDateTime fechaActualizacionR) {
         this.fechaActualizacionR = fechaActualizacionR;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public Usuario getUsuario() {

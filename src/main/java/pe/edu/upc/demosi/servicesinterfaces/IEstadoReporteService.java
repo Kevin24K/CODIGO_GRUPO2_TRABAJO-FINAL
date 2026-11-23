@@ -11,4 +11,6 @@ public interface IEstadoReporteService {
     List<EstadoReporte> list();
     void delete(long id);
     public Optional<EstadoReporte> listId(Long id);
+
+    void update(Long id, EstadoReporte estadoreporte);
 }

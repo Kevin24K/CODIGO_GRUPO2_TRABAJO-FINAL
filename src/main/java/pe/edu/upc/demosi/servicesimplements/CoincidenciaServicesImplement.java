@@ -1,6 +1,8 @@
 package pe.edu.upc.demosi.servicesimplements;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.demosi.entities.Categoria;
 import pe.edu.upc.demosi.entities.Coincidencia;
+import pe.edu.upc.demosi.exceptions.ResourceNotFoundException;
 import pe.edu.upc.demosi.repositories.ICoincidenciaRepository;
 import pe.edu.upc.demosi.servicesinterfaces.ICoincidenciaService;
 
@@ -33,6 +35,10 @@ public class CoincidenciaServicesImplement implements ICoincidenciaService {
 
     @Override
     public void delete(long id) {
-        cR.deleteById(id);
+        Coincidencia coincidencia = listId(id).orElse(null);
+        if (coincidencia == null) {
+            throw new ResourceNotFoundException("No se encontró la coincidencia con el ID: " + id);
+        }
+        cR.delete(coincidencia);
     }
 }

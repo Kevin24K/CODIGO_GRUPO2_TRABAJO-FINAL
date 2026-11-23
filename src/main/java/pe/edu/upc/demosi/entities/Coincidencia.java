@@ -12,7 +12,7 @@ public class Coincidencia {
     @Column(name = "porcentaje_similitud_coincidencia")
     private Double porcentajeSimilitudC;
 
-    @Column(name = "detalle_coin|cidencia", columnDefinition = "TEXT")
+    @Column(name = "detalle_coincidencia", columnDefinition = "TEXT")
     private String detalleC;
 
     @Column(name = "fecha_generacion_coincidencia", nullable = false)

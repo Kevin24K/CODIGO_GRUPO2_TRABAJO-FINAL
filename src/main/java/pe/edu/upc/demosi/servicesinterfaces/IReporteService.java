@@ -12,4 +12,7 @@ public interface IReporteService {
     public Optional<Reporte> listId(Long id);
     List<Reporte> listarPorUsuario(long idUsuario);
     List<Reporte> listarPorEstado(long idEstadoReporte);
+    public List<Reporte> listActivos();
+
+    void update(Long id, Reporte reporte);
 }

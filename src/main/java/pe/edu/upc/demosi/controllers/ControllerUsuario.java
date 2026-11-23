@@ -1,16 +1,14 @@
 package pe.edu.upc.demosi.controllers;
 
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import pe.edu.upc.demosi.dtos.UsuarioDTCList;
-import pe.edu.upc.demosi.dtos.UsuarioDTCinsert;
-import pe.edu.upc.demosi.entities.Rol;
-import pe.edu.upc.demosi.entities.Usuario;
+import org.modelmapper.ModelMapper;
+import pe.edu.upc.demosi.dtos.*;
+import pe.edu.upc.demosi.entities.*;
 import pe.edu.upc.demosi.exceptions.ResourceNotFoundException;
 import pe.edu.upc.demosi.servicesinterfaces.IRolService;
 import pe.edu.upc.demosi.servicesinterfaces.IUsuarioService;
@@ -26,11 +24,13 @@ public class ControllerUsuario {
     private final IUsuarioService uS;
     private final IRolService rS;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
-    public ControllerUsuario(IUsuarioService uS, IRolService rS, PasswordEncoder passwordEncoder) {
+    public ControllerUsuario(IUsuarioService uS, IRolService rS, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.uS = uS;
         this.rS = rS;
         this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping
@@ -46,11 +46,9 @@ public class ControllerUsuario {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UsuarioDTCList> registrar(@Valid @RequestBody UsuarioDTCinsert dto) {
-
         Rol rol = rS.listId(dto.getIdRol())
                 .orElseThrow(() ->
                         new ResourceNotFoundException("No existe el rol con el id: " + dto.getIdRol()));
-
         Usuario usuario = new Usuario();
         usuario.setNombre(dto.getNombre());
         usuario.setApellido(dto.getApellido());
@@ -59,16 +57,37 @@ public class ControllerUsuario {
         usuario.setRol(rol);
         usuario.setFechaRegistro(LocalDateTime.now());
         usuario.setActivo(true);
-
         uS.insert(usuario);
-
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(usuario.getIdUsuario())
                 .toUri();
-
         return ResponseEntity.created(location).body(toListDTO(usuario));
+    }
+
+    @GetMapping("/activos")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UsuarioActivoDTCList>> listarActivos() {
+        List<UsuarioActivoDTCList> lista = uS.listarActivos()
+                .stream()
+                .map(u -> {
+                    UsuarioActivoDTCList dto = new UsuarioActivoDTCList();
+                    dto.setIdUsuario(u.getIdUsuario());
+                    dto.setNombre(u.getNombre());
+                    dto.setApellido(u.getApellido());
+                    dto.setCorreo(u.getCorreo());
+                    dto.setFechaRegistro(u.getFechaRegistro());
+                    return dto;
+                })
+                .toList();
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/activos-con-rol")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UsuarioDTCList>> listarActivosConRol() {
+        return ResponseEntity.ok(uS.listarActivosConRol());
     }
 
     private UsuarioDTCList toListDTO(Usuario u) {
@@ -84,17 +103,27 @@ public class ControllerUsuario {
         return dto;
     }
 
-    // HU46: Retornar únicamente los usuarios donde activo = true con HTTP 200 OK
-    @GetMapping("/activos")
-    public ResponseEntity<List<Usuario>> listActivos() {
-        List<Usuario> lista = uS.listActivos();
-        return new ResponseEntity<>(lista, HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        Usuario usuario = uS.listId(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "No existe un usuario con el id: " + id
+                        )
+                );
+        uS.delete(usuario.getIdUsuario());
+        return ResponseEntity.noContent().build();
     }
 
-    // HU47: Retornar los campos requeridos (id_usuario, nombre, apellido, correo, rol) con HTTP 200 OK
-    @GetMapping("/activos-con-rol")
-    public ResponseEntity<List<Object[]>> listActivosConRol() {
-        List<Object[]> lista = uS.listActivosConRol();
-        return new ResponseEntity<>(lista, HttpStatus.OK);
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UsuarioDTODetail> actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody UsuarioDTOUpdate dto) {
+        Usuario usuario = modelMapper.map(dto, Usuario.class);
+        uS.update(id, usuario);
+        UsuarioDTODetail responseDTO = modelMapper.map(uS.listId(id), UsuarioDTODetail.class);
+        return ResponseEntity.ok(responseDTO);
     }
 }

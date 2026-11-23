@@ -11,4 +11,6 @@ public interface INotificacionService {
     public Optional<Notificacion> listId(Long id);
     void delete(long id);
     List<Notificacion> listarPorUsuario(long idUsuario);
+
+    void update(Long id, Notificacion notificacion);
 }

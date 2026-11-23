@@ -2,6 +2,7 @@ package pe.edu.upc.demosi.servicesimplements;
 
 import org.springframework.stereotype.Service;
 import pe.edu.upc.demosi.entities.Rol;
+import pe.edu.upc.demosi.exceptions.ResourceNotFoundException;
 import pe.edu.upc.demosi.repositories.IRolRepository;
 import pe.edu.upc.demosi.servicesinterfaces.IRolService;
 
@@ -33,6 +34,10 @@ public class RolServicesImplement implements IRolService {
 
     @Override
     public void delete(long id) {
-        rR.deleteById(id);
+        Rol rol = listId(id).orElse(null);
+        if (rol == null) {
+            throw new ResourceNotFoundException("No se encontró el rol con el ID: " + id);
+        }
+        rR.delete(rol);
     }
 }

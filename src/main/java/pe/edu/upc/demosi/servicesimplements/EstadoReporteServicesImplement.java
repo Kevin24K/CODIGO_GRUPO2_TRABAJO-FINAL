@@ -29,7 +29,6 @@ public class EstadoReporteServicesImplement implements IEstadoReporteService {
     public Optional<EstadoReporte> listId(Long id) {
         return eR.findById(id);
     }
-
     @Override
     public void delete(long id) {
         eR.deleteById(id);

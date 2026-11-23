@@ -10,4 +10,7 @@ public interface IEstadoCoincidenciaService {
     List<EstadoCoincidencia> list();
     public Optional<EstadoCoincidencia> listId(Long id);
     void delete(long id);
+    List<EstadoCoincidencia> listPendientes();
+
+    void update(Long id, EstadoCoincidencia estadocoincidencia);
 }

@@ -15,13 +15,17 @@ public class EstadoReporte {
     @Column(name = "descripcionEReporte", length = 255)
     private String descripcionEReporte;
 
+    @Column(name = "activo", nullable = false)
+    private Boolean activo = true; // true por defecto al crearse
+
     public EstadoReporte() {
     }
 
-    public EstadoReporte(Long idEstadoReporte, String nombreEReporte, String descripcionEReporte) {
+    public EstadoReporte(Long idEstadoReporte, String nombreEReporte, String descripcionEReporte, Boolean activo) {
         this.idEstadoReporte = idEstadoReporte;
         this.nombreEReporte = nombreEReporte;
         this.descripcionEReporte = descripcionEReporte;
+        this.activo = activo;
     }
 
     public Long getIdEstadoReporte() {
@@ -46,5 +50,13 @@ public class EstadoReporte {
 
     public void setDescripcionEReporte(String descripcionEReporte) {
         this.descripcionEReporte = descripcionEReporte;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 }

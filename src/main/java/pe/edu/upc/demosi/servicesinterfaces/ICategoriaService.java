@@ -9,5 +9,6 @@ public interface ICategoriaService {
     void insert(Categoria categoria);
     List<Categoria> list();
     void delete(long id);
-    Optional<Categoria> listId(Long idCategoria);
+    Optional<Categoria> listId(Long id);
+    void update(Long id, Categoria c);
 }

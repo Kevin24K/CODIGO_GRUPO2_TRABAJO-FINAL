@@ -12,14 +12,14 @@ import java.util.Optional;
 public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Optional<Usuario> findByCorreo(String correo);
-
-    // HU46: Consulta JPQL para filtrar usuarios con estado activo
+    // HU46: usuarios activos (JPQL)
     @Query("SELECT u FROM Usuario u WHERE u.activo = true")
-    List<Usuario> findUsuariosActivos();
+    List<Usuario> listarActivos();
 
-    // HU47: Consulta SQL nativa con JOIN entre Usuario y Rol para usuarios activos
-    @Query(value = "SELECT u.id_usuario, u.nombre, u.apellido, u.correo, r.nombre_rol " +
-            "FROM usuarios u INNER JOIN roles r ON u.id_rol = r.id_rol " +
+    // HU47: usuarios activos con su rol (SQL nativo con JOIN)
+    @Query(value = "SELECT u.id_usuario, u.nombre, u.apellido, u.correo, u.fecha_registro, r.id_rol, r.nombre_rol " +
+            "FROM usuario u " +
+            "INNER JOIN rol r ON u.id_rol = r.id_rol " +
             "WHERE u.activo = true", nativeQuery = true)
-    List<Object[]> findUsuariosActivosConRol();
+    List<Object[]> listarActivosConRolNative();
 }

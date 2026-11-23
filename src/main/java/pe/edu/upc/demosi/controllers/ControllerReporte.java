@@ -3,14 +3,11 @@ package pe.edu.upc.demosi.controllers;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import pe.edu.upc.demosi.dtos.ReporteDTCList;
-import pe.edu.upc.demosi.dtos.ReporteDTCinsert;
-import pe.edu.upc.demosi.entities.EstadoReporte;
-import pe.edu.upc.demosi.entities.Objeto;
-import pe.edu.upc.demosi.entities.Reporte;
-import pe.edu.upc.demosi.entities.Usuario;
+import pe.edu.upc.demosi.dtos.*;
+import pe.edu.upc.demosi.entities.*;
 import pe.edu.upc.demosi.exceptions.ResourceNotFoundException;
 import pe.edu.upc.demosi.servicesinterfaces.IEstadoReporteService;
 import pe.edu.upc.demosi.servicesinterfaces.IObjetoService;
@@ -24,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/Reportes")
 public class ControllerReporte {
+
     private final IReporteService rS;
     private final IUsuarioService uS;
     private final IEstadoReporteService eR;
@@ -38,57 +36,72 @@ public class ControllerReporte {
         this.modelMapper = modelMapper;
     }
 
-    // 1. MÉTODO PARA LISTAR (Usa el DTCList)
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<ReporteDTCList>> listar() {
-
         List<ReporteDTCList> lista = rS.list()
                 .stream()
                 .map(reporte -> modelMapper.map(reporte, ReporteDTCList.class))
                 .toList();
-
         return ResponseEntity.ok(lista);
     }
 
-    // 2. MÉTODO PARA CREAR (Usa el DTCinsert)
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ReporteDTCinsert> registrar(
             @Valid @RequestBody ReporteDTCinsert dto) {
-        // 1. Validamos las 3 dependencias (Lanzando 404 si alguna falla)
         Usuario usuario = uS.listId(dto.getIdUsuario())
                 .orElseThrow(() -> new ResourceNotFoundException("No existe el usuario con id: " + dto.getIdUsuario()));
-
         Objeto objeto = oS.listId(dto.getIdObjeto())
                 .orElseThrow(() -> new ResourceNotFoundException("No existe el objeto con id: " + dto.getIdObjeto()));
-
         EstadoReporte estado = eR.listId(dto.getIdEstadoReporte())
                 .orElseThrow(() -> new ResourceNotFoundException("No existe el estado de reporte con id: " + dto.getIdEstadoReporte()));
-
-        // 2. Mapeamos y asignamos las 3 entidades validadas
         Reporte repS = modelMapper.map(dto, Reporte.class);
         repS.setUsuario(usuario);
         repS.setObjeto(objeto);
         repS.setEstadoReporte(estado);
-
-        // --- ALTERNATIVA A @PREPERSIST: Asignación manual de fechas ---
         repS.setFechaCreacion(LocalDateTime.now());
         repS.setFechaActualizacionR(LocalDateTime.now());
-
-        // 3. Guardamos
         rS.insert(repS);
-
-        // 4. Mapeamos a la respuesta y le inyectamos los IDs
         ReporteDTCinsert responseDTO = modelMapper.map(repS, ReporteDTCinsert.class);
-
-        // 5. Devolvemos el 201 Created
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(repS.getIdReporte())
                 .toUri();
-
         return ResponseEntity
                 .created(location)
                 .body(responseDTO);
+    }
+
+    @GetMapping("/activos")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<Reporte>> listarActivos() {
+        List<Reporte> lista = rS.listActivos();
+        return ResponseEntity.ok(lista);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        Reporte reporte = rS.listId(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "No existe un reporte con el id: " + id
+                        )
+                );
+        rS.delete(reporte.getIdReporte());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    public ResponseEntity<ReporteDTODetail> actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody ReporteDTOUpdate dto) {
+        Reporte reporte = modelMapper.map(dto, Reporte.class);
+        rS.update(id, reporte);
+        ReporteDTODetail responseDTO = modelMapper.map(rS.listId(id), ReporteDTODetail.class);
+        return ResponseEntity.ok(responseDTO);
     }
 }

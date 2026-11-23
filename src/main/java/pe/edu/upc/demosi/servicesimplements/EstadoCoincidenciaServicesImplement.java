@@ -35,4 +35,10 @@ public class EstadoCoincidenciaServicesImplement implements IEstadoCoincidenciaS
     public void delete(long id) {
         eR.deleteById(id);
     }
+
+    @Override
+    public List<EstadoCoincidencia> listPendientes() {
+        return eR.findCoincidenciasPendientes(); // Asegúrate de que eR sea tu IEstadoCoincidenciaRepository inyectado
+    }
+
 }

@@ -10,4 +10,6 @@ public interface IRolService {
     List<Rol> list();
     public Optional<Rol> listId(Long id);
     void delete(long id);
+
+    void update(Long id, Rol rol);
 }
