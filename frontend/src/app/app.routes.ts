@@ -13,6 +13,7 @@ import { Rinsertcomponent } from './components/reportecomponent/rinsertcomponent
 import { Usuariocomponent } from './components/usuariocomponent/usuariocomponent';
 import { Ulistcomponent } from './components/usuariocomponent/ulistcomponent/ulistcomponent';
 import { Uinsertcomponent } from './components/usuariocomponent/uinsertcomponent/uinsertcomponent';
+import { Infocomponent } from './components/usuariocomponent/infocomponent/infocomponent';
 import { adminGuard,adminStaffGuard, authGuard } from './guards/authguard';
 
 export const routes: Routes = [
@@ -62,7 +63,8 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'listar', pathMatch: 'full' },
             { path: 'listar', component: Ulistcomponent },
-            { path: 'insertar', component: Uinsertcomponent }
+            { path: 'insertar', component: Uinsertcomponent },
+            { path: 'informacion', component:Infocomponent}
         ]
     },
     {

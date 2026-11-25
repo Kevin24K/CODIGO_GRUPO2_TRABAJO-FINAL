@@ -27,6 +27,7 @@
         <mat-menu #menuUsuario="matMenu">
             <button mat-menu-item routerLink="/usuarios/listar"><mat-icon>list</mat-icon>Listar</button>
             <button mat-menu-item routerLink="/usuarios/insertar"><mat-icon>add</mat-icon>Registrar</button>
+            <button mat-menu-item routerLink="/usuarios/informacion"><mat-icon>bar_chart</mat-icon>Información</button>
         </mat-menu>
     }
 
@@ -37,6 +38,9 @@
         <span class="correo">{{ lS.getCorreo() }}</span>
     </button>
     <mat-menu #menuCuenta="matMenu">
+        @if (lS.esAdmin()) {
+            <button mat-menu-item routerLink="/usuarios/informacion"><mat-icon>bar_chart</mat-icon>Información</button>
+        }
         <button mat-menu-item (click)="cerrarSesion()"><mat-icon>logout</mat-icon>Cerrar sesión</button>
     </mat-menu>
 </mat-toolbar>
