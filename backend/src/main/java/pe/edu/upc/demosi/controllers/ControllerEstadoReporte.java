@@ -8,7 +8,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pe.edu.upc.demosi.dtos.EstadoReporteDTOList;
 import pe.edu.upc.demosi.dtos.EstadoReporteDTOinsert;
 import pe.edu.upc.demosi.entities.EstadoReporte;
-import pe.edu.upc.demosi.exceptions.ResourceNotFoundException;
 import pe.edu.upc.demosi.servicesinterfaces.IEstadoReporteService;
 
 import java.net.URI;

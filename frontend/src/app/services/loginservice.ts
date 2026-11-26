@@ -8,68 +8,82 @@ import { LoginRequestDTO, LoginResponseDTO } from '../models/LoginDTO';
   providedIn: 'root',
 })
 export class Loginservice {
-
-  private apiURL = `${environment.base}/login`
+  private apiURL = `${environment.base}/login`;
 
   constructor(private http: HttpClient) {}
 
   login(request: LoginRequestDTO): Observable<LoginResponseDTO> {
     return this.http.post<LoginResponseDTO>(this.apiURL, request).pipe(
       tap(resp => {
-        localStorage.setItem('token', resp.token)
-        localStorage.setItem('correo', resp.correo)
+        if (this.hayStorage()) {
+          localStorage.setItem('token', resp.token);
+          localStorage.setItem('correo', resp.correo);
+        }
       })
-    )
+    );
   }
 
   logout() {
     if (this.hayStorage()) {
-      localStorage.removeItem('token')
-      localStorage.removeItem('correo')
+      localStorage.removeItem('token');
+      localStorage.removeItem('correo');
     }
   }
 
   getToken(): string | null {
-    return this.hayStorage() ? localStorage.getItem('token') : null
+    return this.hayStorage() ? localStorage.getItem('token') : null;
   }
 
   getCorreo(): string {
-    return this.hayStorage() ? (localStorage.getItem('correo') ?? '') : ''
+    return this.hayStorage() ? (localStorage.getItem('correo') ?? '') : '';
   }
 
   // Hay sesión si existe un token y todavía no venció
   estaLogueado(): boolean {
-    if (!environment.seguridad) return true//agregado por mientras
-    const token = this.getToken()
-    if (!token) return false
-    const payload = this.leerPayload(token)
+    if (!environment.seguridad) return true;
+    const token = this.getToken();
+    if (!token) return false;
+    const payload = this.leerPayload(token);
     if (payload?.exp && payload.exp * 1000 < Date.now()) {
-      this.logout()
-      return false
+      this.logout();
+      return false;
     }
-    return true
+    return true;
+  }
+
+  getRoles(): string[] {
+    const token = this.getToken();
+    if (!token) return [];
+    const roles: string = this.leerPayload(token)?.roles ?? '';
+    return roles.split(',').map(r => r.trim()).filter(Boolean);
+  }
+
+  tieneRol(...rolesPermitidos: string[]): boolean {
+    if (!environment.seguridad) return true;
+    const rolesUsuario = this.getRoles();
+    return rolesPermitidos.some(r => rolesUsuario.includes(r));
   }
 
   // Los roles vienen en el claim "roles" del JWT, ej: "ROLE_ADMIN"
   esAdmin(): boolean {
-    if (!environment.seguridad) return true//agregado por mientras
-    const token = this.getToken()
-    if (!token) return false
-    const roles: string = this.leerPayload(token)?.roles ?? ''
-    return roles.split(',').includes('ROLE_ADMIN')
+    return this.tieneRol('ROLE_ADMIN');
+  }
+
+  esAdminOStaff(): boolean {
+    return this.tieneRol('ROLE_ADMIN', 'ROLE_STAFF');
   }
 
   private leerPayload(token: string): any {
     try {
-      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')
-      return JSON.parse(atob(base64))
+      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(base64));
     } catch {
-      return null
+      return null;
     }
   }
 
   // localStorage no existe cuando Angular renderiza en el servidor (SSR)
   private hayStorage(): boolean {
-    return typeof localStorage !== 'undefined'
+    return typeof localStorage !== 'undefined';
   }
 }

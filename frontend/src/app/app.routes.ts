@@ -14,7 +14,6 @@ import { Usuariocomponent } from './components/usuariocomponent/usuariocomponent
 import { Ulistcomponent } from './components/usuariocomponent/ulistcomponent/ulistcomponent';
 import { Uinsertcomponent } from './components/usuariocomponent/uinsertcomponent/uinsertcomponent';
 import { Busquedacomponent } from './components/busquedacomponent/busquedacomponent';
-import { adminGuard, authGuard } from './guards/authguard';
 
 export const routes: Routes = [
     {
@@ -33,7 +32,6 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'listar', pathMatch: 'full' },
             { path: 'listar', component: Catlistcomponent },
-            { path: 'insertar', component: Catinsertcomponent }
         ]
     },
     {
@@ -63,7 +61,18 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'listar', pathMatch: 'full' },
             { path: 'listar', component: Ulistcomponent },
-            { path: 'insertar', component: Uinsertcomponent }
+            { path: 'insertar', component: Uinsertcomponent },
+            { path: 'informacion', component:Infocomponent}
+        ]
+    },
+     {
+        path: 'coincidencias',
+        component: Coincidenciacomponent,
+        canActivate: [authGuard, adminGuard],
+        children: [
+            { path: '', redirectTo: 'listar', pathMatch: 'full' },
+            { path: 'listar', component: Clistcomponent },
+            { path: 'insertar', component: Cinsertcomponent }
         ]
     },
     {

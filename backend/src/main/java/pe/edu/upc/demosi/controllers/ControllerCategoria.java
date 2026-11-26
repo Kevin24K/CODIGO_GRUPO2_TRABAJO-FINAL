@@ -10,7 +10,6 @@ import pe.edu.upc.demosi.dtos.CategoriaDTCinsert;
 import pe.edu.upc.demosi.dtos.CategoriaDTODetail;
 import pe.edu.upc.demosi.dtos.CategoriaDTOUpdate;
 import pe.edu.upc.demosi.entities.Categoria;
-import pe.edu.upc.demosi.exceptions.ResourceNotFoundException;
 import pe.edu.upc.demosi.servicesinterfaces.ICategoriaService;
 
 import java.net.URI;

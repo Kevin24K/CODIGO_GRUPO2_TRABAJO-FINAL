@@ -1,7 +1,6 @@
 package pe.edu.upc.demosi.controllers;
 
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,12 +14,10 @@ import pe.edu.upc.demosi.entities.Usuario;
 import pe.edu.upc.demosi.exceptions.ResourceNotFoundException;
 import pe.edu.upc.demosi.servicesinterfaces.IRolService;
 import pe.edu.upc.demosi.servicesinterfaces.IUsuarioService;
-import org.modelmapper.ModelMapper;
 
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/Usuarios")
@@ -29,13 +26,10 @@ public class ControllerUsuario {
     private final IUsuarioService uS;
     private final IRolService rS;
     private final PasswordEncoder passwordEncoder;
-    private final ModelMapper modelMapper;
 
-    public ControllerUsuario(IUsuarioService uS, IRolService rS, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.uS = uS;
         this.rS = rS;
         this.passwordEncoder = passwordEncoder;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping

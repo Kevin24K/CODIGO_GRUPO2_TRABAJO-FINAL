@@ -24,4 +24,7 @@ export class Reporteservice {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiURL}/${id}`)
   }
+  getTotalByCategory(): Observable<TotalDTO[]> {
+    return this.http.get<TotalDTO[]>(`${this.apiURL}/total-category`);
+  }
 }
