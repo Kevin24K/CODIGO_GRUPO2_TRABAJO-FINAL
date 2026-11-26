@@ -29,7 +29,7 @@ export class Rlistcomponent implements OnInit {
 
   constructor(private rS: Reporteservice, private oS: Objetoservice,
     private eS: Estadoreporteservice, private uS: Usuarioservice,
-    private lS: Loginservice, private snack: MatSnackBar) {}
+    public lS: Loginservice, private snack: MatSnackBar) {}
 
   ngOnInit(): void {
     this.obtenerReportes()

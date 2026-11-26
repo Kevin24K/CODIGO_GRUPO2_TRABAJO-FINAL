@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CategoriaDTO } from '../../../models/CategoriaDTO';
 import { Categoriaservice } from '../../../services/categoriaservice';
+import { Loginservice } from '../../../services/loginservice';
 
 @Component({
   selector: 'app-catlistcomponent',
