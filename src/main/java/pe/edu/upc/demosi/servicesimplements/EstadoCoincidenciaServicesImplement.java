@@ -37,8 +37,15 @@ public class EstadoCoincidenciaServicesImplement implements IEstadoCoincidenciaS
     }
 
     @Override
+    public void update(EstadoCoincidencia estadoCoincidencia) {
+        eR.save(estadoCoincidencia);
+    }
+
+    @Override
     public List<EstadoCoincidencia> listPendientes() {
         return eR.findCoincidenciasPendientes(); // Asegúrate de que eR sea tu IEstadoCoincidenciaRepository inyectado
     }
+
+
 
 }

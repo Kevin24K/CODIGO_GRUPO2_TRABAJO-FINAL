@@ -10,7 +10,6 @@ public interface IEstadoReporteService {
     void insert(EstadoReporte estadoReporte);
     List<EstadoReporte> list();
     void delete(long id);
+    public void update(EstadoReporte estadoReporte);
     public Optional<EstadoReporte> listId(Long id);
-
-    void update(Long id, EstadoReporte estadoreporte);
 }

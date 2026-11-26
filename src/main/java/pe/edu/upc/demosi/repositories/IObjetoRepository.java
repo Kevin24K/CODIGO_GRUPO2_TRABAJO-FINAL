@@ -20,4 +20,5 @@ public interface IObjetoRepository extends JpaRepository<Objeto, Long> {
             "FROM objeto o " +
             "INNER JOIN categoria c ON o.id_categoria = c.id_categoria", nativeQuery = true)
     List<Object[]> listarConCategoriaNative();
+
 }

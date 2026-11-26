@@ -27,6 +27,11 @@ public class UsuarioDTCinsert {
     @NotNull(message = "El Id del Rol es obligatorio.")
     private Long idRol;
 
+    private Long idUsuario;
+
+    public Long getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(Long idUsuario) { this.idUsuario = idUsuario; }
+
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
 

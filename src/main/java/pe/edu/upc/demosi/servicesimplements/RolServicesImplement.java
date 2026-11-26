@@ -40,4 +40,8 @@ public class RolServicesImplement implements IRolService {
         }
         rR.delete(rol);
     }
+    @Override
+    public void update(Rol rol) {
+        rR.save(rol);
+    }
 }

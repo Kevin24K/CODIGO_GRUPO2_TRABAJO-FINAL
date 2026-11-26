@@ -1,8 +1,10 @@
 package pe.edu.upc.demosi.entities;
+
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity

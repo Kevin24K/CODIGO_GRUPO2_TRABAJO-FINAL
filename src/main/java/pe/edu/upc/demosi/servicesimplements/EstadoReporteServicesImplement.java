@@ -26,6 +26,11 @@ public class EstadoReporteServicesImplement implements IEstadoReporteService {
     }
 
     @Override
+    public void update(EstadoReporte estadoReporte) {
+        eR.save(estadoReporte);
+    }
+
+    @Override
     public Optional<EstadoReporte> listId(Long id) {
         return eR.findById(id);
     }

@@ -7,9 +7,8 @@ import java.util.Optional;
 
 public interface IRolService {
     void insert(Rol rol);
+    public void update(Rol rol);
     List<Rol> list();
     public Optional<Rol> listId(Long id);
     void delete(long id);
-
-    void update(Long id, Rol rol);
 }

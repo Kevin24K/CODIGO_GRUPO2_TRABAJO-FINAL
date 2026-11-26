@@ -10,6 +10,5 @@ public interface ICoincidenciaService {
     List<Coincidencia> list();
     public Optional<Coincidencia> listId(Long id);
     void delete(long id);
-
-    void update(Long id, Coincidencia coincidencia);
+    void update(Coincidencia coincidencia);
 }

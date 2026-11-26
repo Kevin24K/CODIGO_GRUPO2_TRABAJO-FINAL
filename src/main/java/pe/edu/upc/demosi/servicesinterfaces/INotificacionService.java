@@ -10,7 +10,7 @@ public interface INotificacionService {
     List<Notificacion> list();
     public Optional<Notificacion> listId(Long id);
     void delete(long id);
+    void update(Notificacion notificacion);
     List<Notificacion> listarPorUsuario(long idUsuario);
 
-    void update(Long id, Notificacion notificacion);
 }
