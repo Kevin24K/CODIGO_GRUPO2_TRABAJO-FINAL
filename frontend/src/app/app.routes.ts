@@ -13,12 +13,12 @@ import { Rinsertcomponent } from './components/reportecomponent/rinsertcomponent
 import { Usuariocomponent } from './components/usuariocomponent/usuariocomponent';
 import { Ulistcomponent } from './components/usuariocomponent/ulistcomponent/ulistcomponent';
 import { Uinsertcomponent } from './components/usuariocomponent/uinsertcomponent/uinsertcomponent';
-import { Infocomponent } from './components/usuariocomponent/infocomponent/infocomponent';
-import { Coincidenciacomponent } from './components/coincidenciacomponent/coincidenciacomponent';
-import {Cinsertcomponent} from './components/coincidenciacomponent/cinsertcomponent/cinsertcomponent';
+import {Infocomponent} from './components/usuariocomponent/infocomponent/infocomponent'
+import {Coincidenciacomponent} from './components/coincidenciacomponent/coincidenciacomponent'
 import {Clistcomponent} from './components/coincidenciacomponent/clistcomponent/clistcomponent'
-
-import { adminGuard,adminStaffGuard, authGuard } from './guards/authguard';
+import {Cinsertcomponent} from './components/coincidenciacomponent/cinsertcomponent/cinsertcomponent'
+import { Busquedacomponent } from './components/busquedacomponent/busquedacomponent';
+import { adminGuard,adminStaffGuard,authGuard } from './guards/authguard';
 
 export const routes: Routes = [
     {
@@ -80,6 +80,11 @@ export const routes: Routes = [
             { path: 'listar', component: Clistcomponent },
             { path: 'insertar', component: Cinsertcomponent }
         ]
+    },
+    {
+        path: 'buscar', // HUF17: búsqueda de coincidencias por descripción
+        component: Busquedacomponent,
+        canActivate: [authGuard]
     },
     {
         path: '**',

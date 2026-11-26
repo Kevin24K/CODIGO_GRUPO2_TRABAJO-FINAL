@@ -22,6 +22,8 @@
         <button mat-menu-item routerLink="/reportes/insertar"><mat-icon>add</mat-icon>Registrar</button>
     </mat-menu>
 
+    <button matButton routerLink="/buscar"><mat-icon>travel_explore</mat-icon> Buscar objeto</button>
+
     @if (lS.esAdmin()) {
         <button matButton [matMenuTriggerFor]="menuUsuario">Usuarios</button>
         <mat-menu #menuUsuario="matMenu">

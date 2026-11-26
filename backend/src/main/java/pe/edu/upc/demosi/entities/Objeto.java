@@ -27,6 +27,14 @@ public class Objeto {
     @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;
 
+    // HUF19: foto comprimida en base64 (data:image/jpeg;base64,...)
+    @Column(name = "foto_objeto", columnDefinition = "TEXT")
+    private String fotoObjeto;
+
+    // HUF17: breve descripción de la foto generada por la IA
+    @Column(name = "descripcion_ia_objeto", columnDefinition = "TEXT")
+    private String descripcionIaObjeto;
+
     public Objeto() {
     }
 
@@ -95,5 +103,21 @@ public class Objeto {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public String getFotoObjeto() {
+        return fotoObjeto;
+    }
+
+    public void setFotoObjeto(String fotoObjeto) {
+        this.fotoObjeto = fotoObjeto;
+    }
+
+    public String getDescripcionIaObjeto() {
+        return descripcionIaObjeto;
+    }
+
+    public void setDescripcionIaObjeto(String descripcionIaObjeto) {
+        this.descripcionIaObjeto = descripcionIaObjeto;
     }
 }
