@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pe.edu.upc.demosi.dtos.ReporteDTCList;
 import pe.edu.upc.demosi.dtos.ReporteDTCinsert;
+import pe.edu.upc.demosi.dtos.TotalDTO;
 import pe.edu.upc.demosi.entities.EstadoReporte;
 import pe.edu.upc.demosi.entities.Objeto;
 import pe.edu.upc.demosi.entities.Reporte;

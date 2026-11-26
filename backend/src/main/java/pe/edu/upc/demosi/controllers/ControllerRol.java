@@ -7,10 +7,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pe.edu.upc.demosi.dtos.RolDTCinsert;
 import pe.edu.upc.demosi.dtos.RolDTCList;
 import pe.edu.upc.demosi.entities.Rol;
+import pe.edu.upc.demosi.exceptions.ResourceNotFoundException;
 import pe.edu.upc.demosi.servicesinterfaces.IRolService;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/Roles")

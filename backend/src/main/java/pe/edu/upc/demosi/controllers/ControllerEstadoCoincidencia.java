@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pe.edu.upc.demosi.dtos.EstadoCoincidenciaDTOinsert;
 import pe.edu.upc.demosi.entities.EstadoCoincidencia;
+import pe.edu.upc.demosi.exceptions.ResourceNotFoundException;
 import pe.edu.upc.demosi.servicesinterfaces.IEstadoCoincidenciaService;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/EstadoCoincidencia")
