@@ -13,7 +13,7 @@ import { Rinsertcomponent } from './components/reportecomponent/rinsertcomponent
 import { Usuariocomponent } from './components/usuariocomponent/usuariocomponent';
 import { Ulistcomponent } from './components/usuariocomponent/ulistcomponent/ulistcomponent';
 import { Uinsertcomponent } from './components/usuariocomponent/uinsertcomponent/uinsertcomponent';
-import { adminGuard, authGuard } from './guards/authguard';
+import { adminGuard,adminStaffGuard, authGuard } from './guards/authguard';
 
 export const routes: Routes = [
     {
@@ -32,7 +32,7 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'listar', pathMatch: 'full' },
             { path: 'listar', component: Catlistcomponent },
-            { path: 'insertar', component: Catinsertcomponent }
+            { path: 'insertar', component: Catinsertcomponent, canActivate: [adminStaffGuard] }
         ]
     },
     {
