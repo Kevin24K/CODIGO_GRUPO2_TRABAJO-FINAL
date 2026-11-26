@@ -13,60 +13,75 @@ import { Rinsertcomponent } from './components/reportecomponent/rinsertcomponent
 import { Usuariocomponent } from './components/usuariocomponent/usuariocomponent';
 import { Ulistcomponent } from './components/usuariocomponent/ulistcomponent/ulistcomponent';
 import { Uinsertcomponent } from './components/usuariocomponent/uinsertcomponent/uinsertcomponent';
-import { adminGuard, adminStaffGuard, authGuard } from './guards/authguard';
+import { adminGuard, authGuard } from './guards/authguard';
+import { Infocomponent } from './components/reportecomponent/infocomponent/infocomponent';
+import { Coincidenciacomponent } from './components/coincidenciacomponent/coincidenciacomponent';
+import { Clistcomponent } from './components/coincidenciacomponent/clistcomponent/clistcomponent';
+import { Cinsertcomponent } from './components/coincidenciacomponent/cinsertcomponent/cinsertcomponent';
 
 export const routes: Routes = [
-  {
-    path: 'login',
-    component: Logincomponent
-  },
-  {
-    path: '',
-    component: Homecomponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'categorias',
-    component: Categoriacomponent,
-    canActivate: [authGuard],
-    children: [
-      { path: '', redirectTo: 'listar', pathMatch: 'full' },
-      { path: 'listar', component: Catlistcomponent },
-      { path: 'insertar', component: Catinsertcomponent, canActivate: [adminStaffGuard] }
-    ]
-  },
-  {
-    path: 'objetos',
-    component: Objetocomponent,
-    canActivate: [authGuard],
-    children: [
-      { path: '', redirectTo: 'listar', pathMatch: 'full' },
-      { path: 'listar', component: Olistcomponent },
-      { path: 'insertar', component: Oinsertcomponent }
-    ]
-  },
-  {
-    path: 'reportes',
-    component: Reportecomponent,
-    canActivate: [authGuard],
-    children: [
-      { path: '', redirectTo: 'listar', pathMatch: 'full' },
-      { path: 'listar', component: Rlistcomponent },
-      { path: 'insertar', component: Rinsertcomponent }
-    ]
-  },
-  {
-    path: 'usuarios',
-    component: Usuariocomponent,
-    canActivate: [authGuard, adminGuard],
-    children: [
-      { path: '', redirectTo: 'listar', pathMatch: 'full' },
-      { path: 'listar', component: Ulistcomponent },
-      { path: 'insertar', component: Uinsertcomponent }
-    ]
-  },
-  {
-    path: '**',
-    redirectTo: ''
-  }
+    {
+        path: 'login',
+        component: Logincomponent
+    },
+    {
+        path: '',
+        component: Homecomponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'categorias',
+        component: Categoriacomponent,
+        canActivate: [authGuard],
+        children: [
+            { path: '', redirectTo: 'listar', pathMatch: 'full' },
+            { path: 'listar', component: Catlistcomponent },
+            { path: 'insertar', component: Catinsertcomponent }
+        ]
+    },
+    {
+        path: 'objetos',
+        component: Objetocomponent,
+        canActivate: [authGuard],
+        children: [
+            { path: '', redirectTo: 'listar', pathMatch: 'full' },
+            { path: 'listar', component: Olistcomponent },
+            { path: 'insertar', component: Oinsertcomponent }
+        ]
+    },
+    {
+        path: 'reportes',
+        component: Reportecomponent,
+        canActivate: [authGuard],
+        children: [
+            { path: '', redirectTo: 'listar', pathMatch: 'full' },
+            { path: 'listar', component: Rlistcomponent },
+            { path: 'insertar', component: Rinsertcomponent },
+            { path: 'Informacion', component: Infocomponent }
+        ]
+    },
+    {
+        path: 'usuarios',
+        component: Usuariocomponent,
+        canActivate: [authGuard, adminGuard],
+        children: [
+            { path: '', redirectTo: 'listar', pathMatch: 'full' },
+            { path: 'listar', component: Ulistcomponent },
+            { path: 'insertar', component: Uinsertcomponent }
+        ]
+    },
+    {
+        path: 'coincidencias',
+        component: Coincidenciacomponent,
+        canActivate: [authGuard, adminGuard],
+        children: [
+            { path: '', redirectTo: 'listar', pathMatch: 'full' },
+            { path: 'listar', component: Clistcomponent },
+            { path: 'insertar', component: Cinsertcomponent }
+        ]
+    },
+    {
+        path: '**',
+        redirectTo: ''
+    }
 ];

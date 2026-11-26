@@ -1,7 +1,13 @@
 <div class="page">
     <div class="page-header">
         <h2><mat-icon>inventory_2</mat-icon> Lista de Objetos</h2>
-        <a matButton="filled" routerLink="/objetos/insertar"><mat-icon>add</mat-icon> Registrar objeto</a>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button matButton="outlined" type="button" (click)="toggleSoloActivos()">
+                <mat-icon>{{ soloActivos() ? 'filter_alt_off' : 'filter_alt' }}</mat-icon>
+                {{ soloActivos() ? 'Ver todos' : 'Solo activos' }}
+            </button>
+            <a matButton="filled" routerLink="/objetos/insertar"><mat-icon>add</mat-icon> Registrar objeto</a>
+        </div>
     </div>
 
     <div class="tabla-wrap">

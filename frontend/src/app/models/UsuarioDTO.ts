@@ -18,3 +18,12 @@ export class UsuarioInsertDTO {
     contrasena: string = '';
     idRol: number = 0;
 }
+
+// Lo que devuelve GET /api/Usuarios/activos (UsuarioActivoDTCList)
+export class UsuarioActivoDTO {
+    idUsuario: number = 0;
+    nombre: string = '';
+    apellido: string = '';
+    correo: string = '';
+    fechaRegistro: string = '';
+}

@@ -53,11 +53,9 @@
             <ng-container matColumnDef="c7">
                 <th mat-header-cell *matHeaderCellDef> Acciones </th>
                 <td mat-cell *matCellDef="let element">
-                    @if (lS.esAdminOStaff()){
-                     <button matIconButton class="btn-eliminar" (click)="eliminarReporte(element)" aria-label="Eliminar reporte">
-                         <mat-icon>delete</mat-icon>
-                     </button>
-                    }
+                    <button matIconButton class="btn-eliminar" (click)="eliminarReporte(element)" aria-label="Eliminar reporte">
+                        <mat-icon>delete</mat-icon>
+                    </button>
                 </td>
             </ng-container>
 

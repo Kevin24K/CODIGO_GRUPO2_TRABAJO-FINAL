@@ -1,7 +1,13 @@
 <div class="page">
     <div class="page-header">
         <h2><mat-icon>group</mat-icon> Lista de Usuarios</h2>
-        <a matButton="filled" routerLink="/usuarios/insertar"><mat-icon>person_add</mat-icon> Registrar usuario</a>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button matButton="outlined" type="button" (click)="toggleSoloActivos()">
+                <mat-icon>{{ soloActivos() ? 'filter_alt_off' : 'filter_alt' }}</mat-icon>
+                {{ soloActivos() ? 'Ver todos' : 'Solo activos' }}
+            </button>
+            <a matButton="filled" routerLink="/usuarios/insertar"><mat-icon>person_add</mat-icon> Registrar usuario</a>
+        </div>
     </div>
 
     <div class="tabla-wrap">

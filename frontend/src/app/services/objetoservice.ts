@@ -8,20 +8,23 @@ import { ObjetoDTO, ObjetoInsertDTO } from '../models/ObjetoDTO';
   providedIn: 'root',
 })
 export class Objetoservice {
-
-  private apiURL = `${environment.base}/api/Objetos`
+  private apiURL = `${environment.base}/api/Objetos`;
 
   constructor(private http: HttpClient) {}
 
   getObjetos(): Observable<ObjetoDTO[]> {
-    return this.http.get<ObjetoDTO[]>(this.apiURL)
+    return this.http.get<ObjetoDTO[]>(this.apiURL);
+  }
+
+  getActivos(): Observable<ObjetoDTO[]> {
+    return this.http.get<ObjetoDTO[]>(`${this.apiURL}/activos`);
   }
 
   insert(dto: ObjetoInsertDTO): Observable<ObjetoInsertDTO> {
-    return this.http.post<ObjetoInsertDTO>(this.apiURL, dto)
+    return this.http.post<ObjetoInsertDTO>(this.apiURL, dto);
   }
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiURL}/${id}`)
+    return this.http.delete<void>(`${this.apiURL}/${id}`);
   }
 }
