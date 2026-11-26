@@ -1,0 +1,88 @@
+<div class="page">
+    <div class="page-header">
+        <h2><mat-icon>compare_arrows</mat-icon> Registrar Coincidencia</h2>
+    </div>
+    <mat-card class="form-card">
+        <mat-card-content>
+            <form [formGroup]="form" (ngSubmit)="registrar()">
+                <div class="form-grid">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Reporte Perdido</mat-label>
+                        <mat-select formControlName="idReportePerdido">
+                            @for (r of reportesPerdidos(); track r.idReporte) {
+                                <mat-option [value]="r.idReporte">
+                                    #{{ r.idReporte }} — {{ objetos().get(r.idObjeto) ?? ('Objeto #' + r.idObjeto) }} ({{ r.fechaeventoR }})
+                                </mat-option>
+                            }
+                        </mat-select>
+                        @if (reportesPerdidos().length === 0) {
+                            <mat-hint>No hay reportes de tipo PERDIDO</mat-hint>
+                        }
+                        @if (form.get('idReportePerdido')?.hasError('required')) {
+                            <mat-error>Elige un reporte perdido</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Reporte Encontrado</mat-label>
+                        <mat-select formControlName="idReporteEncontrado">
+                            @for (r of reportesEncontrados(); track r.idReporte) {
+                                <mat-option [value]="r.idReporte">
+                                    #{{ r.idReporte }} — {{ objetos().get(r.idObjeto) ?? ('Objeto #' + r.idObjeto) }} ({{ r.fechaeventoR }})
+                                </mat-option>
+                            }
+                        </mat-select>
+                        @if (reportesEncontrados().length === 0) {
+                            <mat-hint>No hay reportes de tipo ENCONTRADO</mat-hint>
+                        }
+                        @if (form.get('idReporteEncontrado')?.hasError('required')) {
+                            <mat-error>Elige un reporte encontrado</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Porcentaje de similitud (%)</mat-label>
+                        <input matInput type="number" step="0.1" min="0" max="100"
+                            formControlName="porcentajeSimilitudC" placeholder="Ej: 85.5">
+                        @if (form.get('porcentajeSimilitudC')?.hasError('required')) {
+                            <mat-error>El porcentaje es obligatorio</mat-error>
+                        } @else if (form.get('porcentajeSimilitudC')?.hasError('min') || form.get('porcentajeSimilitudC')?.hasError('max')) {
+                            <mat-error>Debe estar entre 0 y 100</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Estado de coincidencia</mat-label>
+                        <mat-select formControlName="idEstadoCoincidencia">
+                            @for (e of estados(); track e.idEstadoCoincidencia) {
+                                <mat-option [value]="e.idEstadoCoincidencia">{{ e.nombreEC }}</mat-option>
+                            }
+                        </mat-select>
+                        @if (estados().length === 0) {
+                            <mat-hint>No hay estados registrados en la BD</mat-hint>
+                        }
+                        @if (form.get('idEstadoCoincidencia')?.hasError('required')) {
+                            <mat-error>Elige un estado</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full">
+                        <mat-label>Detalle de la coincidencia</mat-label>
+                        <textarea matInput formControlName="detalleC" rows="3"
+                            placeholder="Ej: Coincidencia en marca, color y zona del campus..."></textarea>
+                        @if (form.get('detalleC')?.hasError('required')) {
+                            <mat-error>El detalle es obligatorio</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <div class="form-acciones">
+                    <a matButton routerLink="/coincidencias/listar">Cancelar</a>
+                    <button matButton="filled" type="submit" [disabled]="guardando()">
+                        <mat-icon>save</mat-icon> Registrar
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
