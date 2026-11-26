@@ -1,0 +1,89 @@
+<div class="page">
+    <div class="page-header">
+        <h2><mat-icon>assignment</mat-icon> Registrar Reporte</h2>
+    </div>
+
+    <mat-card class="form-card">
+        <mat-card-content>
+            <form [formGroup]="form" (ngSubmit)="registrar()">
+                <div class="form-grid">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tipo de reporte</mat-label>
+                        <mat-select formControlName="tipoReporte">
+                            @for (t of tipos; track t) {
+                                <mat-option [value]="t">{{ t }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Estado del reporte</mat-label>
+                        <mat-select formControlName="idEstadoReporte">
+                            @for (e of estados(); track e.idEstadoReporte) {
+                                <mat-option [value]="e.idEstadoReporte">{{ e.nombreEReporte }}</mat-option>
+                            }
+                        </mat-select>
+                        @if (estados().length === 0) {
+                            <mat-hint>No hay estados registrados en la BD</mat-hint>
+                        }
+                        @if (form.get('idEstadoReporte')?.hasError('required')) {
+                            <mat-error>Elige un estado</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Fecha del evento</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="fechaeventoR" [max]="hoy">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        @if (form.get('fechaeventoR')?.hasError('required')) {
+                            <mat-error>La fecha es obligatoria</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Hora del evento</mat-label>
+                        <input matInput type="time" formControlName="horaEventoR">
+                        @if (form.get('horaEventoR')?.hasError('required')) {
+                            <mat-error>La hora es obligatoria</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Objeto</mat-label>
+                        <mat-select formControlName="idObjeto">
+                            @for (o of objetos(); track o.idObjeto) {
+                                <mat-option [value]="o.idObjeto">{{ o.nombreObjeto }} — {{ o.colorObjeto }}</mat-option>
+                            }
+                        </mat-select>
+                        @if (objetos().length === 0) {
+                            <mat-hint>Primero registra un objeto</mat-hint>
+                        }
+                        @if (form.get('idObjeto')?.hasError('required')) {
+                            <mat-error>Elige un objeto</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Usuario que reporta</mat-label>
+                        <mat-select formControlName="idUsuario">
+                            @for (u of usuarios(); track u.idUsuario) {
+                                <mat-option [value]="u.idUsuario">{{ u.nombre }} {{ u.apellido }}</mat-option>
+                            }
+                        </mat-select>
+                        @if (form.get('idUsuario')?.hasError('required')) {
+                            <mat-error>Elige un usuario</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <div class="form-acciones">
+                    <a matButton routerLink="/reportes/listar">Cancelar</a>
+                    <button matButton="filled" type="submit" [disabled]="guardando()">
+                        <mat-icon>save</mat-icon> Registrar
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

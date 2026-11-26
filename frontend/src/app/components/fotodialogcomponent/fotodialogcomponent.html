@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>{{ data.modo === 'ver' ? 'Evidencia fotográfica' : 'Agregar foto' }} — {{ data.objeto.nombreObjeto }}</h2>
+
+<mat-dialog-content>
+    @if (data.modo === 'ver') {
+        <!-- HUF18: ver la foto comprimida guardada -->
+        <img [src]="data.objeto.fotoObjeto" alt="Foto de {{ data.objeto.nombreObjeto }}" class="foto">
+        <p class="peso"><mat-icon>compress</mat-icon> Foto optimizada: <strong>{{ iS.pesoKb(data.objeto.fotoObjeto) }} KB</strong> (JPEG)</p>
+        <div class="desc-ia">
+            <span class="etiqueta"><mat-icon>auto_awesome</mat-icon> Descripción generada por IA</span>
+            <p>{{ data.objeto.descripcionIaObjeto || 'Sin descripción de la IA (revisa el token de Hugging Face).' }}</p>
+        </div>
+    } @else {
+        <app-fotocomponent (fotoLista)="nueva.set($event)"></app-fotocomponent>
+    }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button matButton mat-dialog-close>Cerrar</button>
+    @if (data.modo === 'subir') {
+        <button matButton="filled" (click)="guardar()" [disabled]="!nueva() || guardando()">
+            <mat-icon>save</mat-icon> {{ guardando() ? 'Guardando y describiendo...' : 'Guardar foto' }}
+        </button>
+    }
+</mat-dialog-actions>

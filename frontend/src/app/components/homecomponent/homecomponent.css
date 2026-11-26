@@ -1,0 +1,60 @@
+.bienvenida {
+  text-align: center;
+  margin: 24px 0 32px;
+}
+
+.bienvenida h1 {
+  color: #12324a;
+  font-size: 34px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.bienvenida p {
+  margin: 4px 0;
+  color: #546e7a;
+}
+
+.bienvenida .curso {
+  font-weight: 600;
+  color: #12324a;
+}
+
+.accesos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.acceso {
+  padding: 22px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 14px !important;
+  border-top: 4px solid #f2a900;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.acceso:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(18, 50, 74, 0.18);
+}
+
+.acceso mat-icon {
+  color: #12324a;
+  font-size: 34px;
+  width: 34px;
+  height: 34px;
+}
+
+.acceso h3 {
+  margin: 10px 0 4px;
+  color: #12324a;
+  font-weight: 700;
+}
+
+.acceso p {
+  margin: 0;
+  color: #607d8b;
+  font-size: 14px;
+}

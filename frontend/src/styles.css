@@ -1,0 +1,127 @@
+/* ===== Estilos globales de Lost & Found IA ===== */
+:root {
+  --lf-azul: #12324a;
+  --lf-azul-claro: #e4eef5;
+  --lf-ambar: #f2a900;
+  --lf-texto: #263238;
+  --lf-borde: #d5e1ea;
+}
+
+body {
+  background: #f4f7fa;
+  color: var(--lf-texto);
+}
+
+/* Contenedor de cada página */
+.page {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 28px 16px 40px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.page-header h2 {
+  margin: 0;
+  color: var(--lf-azul);
+  font-weight: 700;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-header h2 mat-icon {
+  color: var(--lf-ambar);
+}
+
+/* Tablas */
+.tabla-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(18, 50, 74, 0.12);
+  background: #fff;
+}
+
+.tabla {
+  width: 100%;
+}
+
+.tabla th.mat-mdc-header-cell {
+  background: var(--lf-azul);
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+}
+
+.tabla tr.mat-mdc-row:nth-child(even) {
+  background: #f7fafc;
+}
+
+.tabla tr.mat-mdc-row:hover {
+  background: var(--lf-azul-claro);
+}
+
+.tabla td.sin-datos {
+  padding: 28px;
+  text-align: center;
+  color: #78909c;
+}
+
+/* Etiquetas (chips) */
+.chip {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.chip-ok { background: #d8f3e3; color: #1b6e3c; }
+.chip-no { background: #fde2e1; color: #a52a22; }
+.chip-perdido { background: #fff1d1; color: #8a5a00; }
+.chip-encontrado { background: #dcecff; color: #134c8c; }
+.chip-neutro { background: var(--lf-azul-claro); color: var(--lf-azul); }
+
+/* Formularios */
+.form-card {
+  max-width: 720px;
+  margin: 0 auto;
+  border-radius: 14px !important;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+}
+
+.form-grid .full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+.form-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.btn-eliminar mat-icon {
+  color: #c62828;
+}

@@ -1,0 +1,40 @@
+mat-toolbar {
+  background: #12324a;
+  color: #ffffff;
+  padding: 0 16px;
+  gap: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  border-bottom: 3px solid #f2a900;
+  --mat-button-text-label-text-color: #ffffff;
+  overflow-x: auto;
+}
+
+.marca {
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0 16px 0 4px;
+  white-space: nowrap;
+}
+
+.espacio {
+  flex: 1 1 auto;
+}
+
+mat-toolbar mat-icon,
+mat-toolbar .mat-mdc-button,
+mat-toolbar .mat-mdc-icon-button {
+  color: #ffffff;
+}
+
+mat-toolbar .mat-mdc-button:hover {
+  background: rgba(242, 169, 0, 0.18);
+}
+
+.cuenta .correo {
+  margin-left: 6px;
+  font-size: 13px;
+}
+
+@media (max-width: 720px) {
+  .marca, .cuenta .correo { display: none; }
+}
