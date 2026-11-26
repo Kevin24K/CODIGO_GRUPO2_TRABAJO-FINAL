@@ -13,6 +13,7 @@ import { Rinsertcomponent } from './components/reportecomponent/rinsertcomponent
 import { Usuariocomponent } from './components/usuariocomponent/usuariocomponent';
 import { Ulistcomponent } from './components/usuariocomponent/ulistcomponent/ulistcomponent';
 import { Uinsertcomponent } from './components/usuariocomponent/uinsertcomponent/uinsertcomponent';
+import { Busquedacomponent } from './components/busquedacomponent/busquedacomponent';
 import { adminGuard, authGuard } from './guards/authguard';
 
 export const routes: Routes = [
@@ -64,6 +65,11 @@ export const routes: Routes = [
             { path: 'listar', component: Ulistcomponent },
             { path: 'insertar', component: Uinsertcomponent }
         ]
+    },
+    {
+        path: 'buscar', // HUF17: búsqueda de coincidencias por descripción
+        component: Busquedacomponent,
+        canActivate: [authGuard]
     },
     {
         path: '**',

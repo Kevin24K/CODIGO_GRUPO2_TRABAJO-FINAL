@@ -13,11 +13,13 @@ import { Objetoservice } from '../../../services/objetoservice';
 import { Categoriaservice } from '../../../services/categoriaservice';
 import { CategoriaDTO } from '../../../models/CategoriaDTO';
 import { ObjetoInsertDTO } from '../../../models/ObjetoDTO';
+import { Fotocomponent } from '../../fotocomponent/fotocomponent';
+import { FotoComprimida } from '../../../services/imagenservice';
 
 @Component({
   selector: 'app-oinsertcomponent',
   imports: [ReactiveFormsModule, RouterLink, MatCardModule, MatFormFieldModule, MatInputModule,
-    MatSelectModule, MatButtonModule, MatIconModule, MatSlideToggleModule],
+    MatSelectModule, MatButtonModule, MatIconModule, MatSlideToggleModule, Fotocomponent],
   templateUrl: './oinsertcomponent.html',
   styleUrl: './oinsertcomponent.css',
 })
@@ -26,6 +28,7 @@ export class Oinsertcomponent implements OnInit {
   form: FormGroup
   categorias = signal<CategoriaDTO[]>([])
   guardando = signal(false)
+  foto = signal<FotoComprimida | null>(null) // HUF19
 
   constructor(private fb: FormBuilder, private oS: Objetoservice, private cS: Categoriaservice,
     private router: Router, private snack: MatSnackBar) {
@@ -53,10 +56,11 @@ export class Oinsertcomponent implements OnInit {
       return
     }
     const o: ObjetoInsertDTO = { ...new ObjetoInsertDTO(), ...this.form.value }
+    o.fotoObjeto = this.foto()?.dataUrl ?? '' // foto comprimida; la IA la describe en el backend
     this.guardando.set(true)
     this.oS.insert(o).subscribe({
       next: () => {
-        this.snack.open('Objeto registrado', 'OK', { duration: 2500 })
+        this.snack.open(this.foto() ? 'Objeto registrado. La IA describió la foto.' : 'Objeto registrado', 'OK', { duration: 3000 })
         this.router.navigate(['/objetos/listar'])
       },
       error: (err) => {

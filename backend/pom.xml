@@ -64,6 +64,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
+        <!-- HUF17: Smile, para calcular la similitud coseno entre embeddings -->
+        <dependency>
+            <groupId>com.github.haifengl</groupId>
+            <artifactId>smile-base</artifactId>
+            <version>3.1.1</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

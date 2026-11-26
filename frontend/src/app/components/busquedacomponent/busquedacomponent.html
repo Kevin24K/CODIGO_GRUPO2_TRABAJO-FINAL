@@ -1,0 +1,88 @@
+<app-menucomponent></app-menucomponent>
+
+<div class="page">
+    <div class="page-header">
+        <h2><mat-icon>travel_explore</mat-icon> Buscar mi objeto perdido</h2>
+    </div>
+
+    <!-- HUF17: la persona escribe lo que perdió -->
+    <mat-card class="buscador">
+        <mat-card-content>
+            <p class="intro">Describe tu objeto con tus palabras. La IA lo compara con los objetos encontrados
+                (su descripción y la que generó a partir de la foto) y te muestra los más parecidos.</p>
+            <mat-form-field appearance="outline" class="campo">
+                <mat-label>¿Qué perdiste?</mat-label>
+                <textarea matInput [formControl]="texto" rows="3"
+                    placeholder="Ej: mochila negra con un llavero azul, la dejé en la biblioteca"
+                    (keydown.control.enter)="buscar()"></textarea>
+                @if (texto.hasError('required')) {
+                    <mat-error>Escribe qué estás buscando</mat-error>
+                } @else if (texto.hasError('minlength')) {
+                    <mat-error>Escribe al menos 3 caracteres</mat-error>
+                }
+            </mat-form-field>
+            <div class="fila">
+                <div class="ejemplos">
+                    <span>Ejemplos:</span>
+                    @for (e of ejemplos; track e) {
+                        <button type="button" class="chip-ej" (click)="usarEjemplo(e)">{{ e }}</button>
+                    }
+                </div>
+                <button matButton="filled" (click)="buscar()" [disabled]="buscando()">
+                    <mat-icon>search</mat-icon> Buscar coincidencias
+                </button>
+            </div>
+        </mat-card-content>
+        @if (buscando()) {
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+    </mat-card>
+
+    @if (buscado() && !buscando()) {
+        @if (resultados().length === 0) {
+            <p class="vacio">No hay objetos encontrados para comparar, o no se pudo conectar con el backend.</p>
+        } @else {
+            <div class="resumen">
+                <h3>Reporte de similitud</h3>
+                <span class="metodo"><mat-icon>auto_awesome</mat-icon> {{ metodo() }}</span>
+            </div>
+
+            <!-- gráfico de barras -->
+            <mat-card class="grafico-card">
+                <div class="grafico-wrap" [style.height.px]="60 + resultados().length * 44">
+                    <canvas #grafico aria-label="Gráfico de barras de similitud" role="img"></canvas>
+                </div>
+            </mat-card>
+
+            <!-- detalle de cada coincidencia -->
+            <div class="lista">
+                @for (r of resultados(); track r.idObjeto) {
+                    <mat-card class="item">
+                        @if (r.fotoObjeto) {
+                            <button type="button" class="foto" (click)="verFoto(r)" aria-label="Ver foto">
+                                <img [src]="r.fotoObjeto" alt="Foto de {{ r.nombreObjeto }}" loading="lazy">
+                            </button>
+                        } @else {
+                            <div class="foto sin-foto"><mat-icon>image_not_supported</mat-icon></div>
+                        }
+                        <div class="info">
+                            <div class="titulo">
+                                <strong>{{ r.nombreObjeto }}</strong>
+                                <span class="chip chip-neutro">{{ r.categoria }}</span>
+                            </div>
+                            <p class="desc">{{ r.descripcionObjeto }}</p>
+                            @if (r.descripcionIaObjeto) {
+                                <p class="desc-ia"><mat-icon>auto_awesome</mat-icon> {{ r.descripcionIaObjeto }}</p>
+                            }
+                            <p class="meta">Color: {{ r.colorObjeto }} · Marca: {{ r.marcaObjeto }}</p>
+                        </div>
+                        <div class="puntaje">
+                            <span class="valor" [style.color]="color(r.porcentaje)">{{ r.porcentaje }} %</span>
+                            <span class="nivel">{{ nivel(r.porcentaje) }}</span>
+                        </div>
+                    </mat-card>
+                }
+            </div>
+        }
+    }
+</div>

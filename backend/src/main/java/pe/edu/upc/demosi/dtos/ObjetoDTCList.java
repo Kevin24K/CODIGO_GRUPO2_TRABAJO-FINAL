@@ -10,6 +10,8 @@ public class ObjetoDTCList {
     private String colorObjeto;
     private String marcaObjeto;
     private Boolean activoObjeto;
+    private String fotoObjeto;
+    private String descripcionIaObjeto;
     private Categoria categoria;
 
     public Long getIdObjeto() {
@@ -66,5 +68,21 @@ public class ObjetoDTCList {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public String getFotoObjeto() {
+        return fotoObjeto;
+    }
+
+    public void setFotoObjeto(String fotoObjeto) {
+        this.fotoObjeto = fotoObjeto;
+    }
+
+    public String getDescripcionIaObjeto() {
+        return descripcionIaObjeto;
+    }
+
+    public void setDescripcionIaObjeto(String descripcionIaObjeto) {
+        this.descripcionIaObjeto = descripcionIaObjeto;
     }
 }

@@ -20,6 +20,8 @@ public class ObjetoDTCinsert {
 
     @NotNull(message = "El estado del objeto no puede ser nulo ni estar vacío")
     private Boolean activoObjeto;
+    private String fotoObjeto;
+    private String descripcionIaObjeto;
 
     @NotNull(message = "El Id de la Categoría es obligatorio.")
     private Long idCategoria;
@@ -78,5 +80,21 @@ public class ObjetoDTCinsert {
 
     public void setIdCategoria(Long idCategoria) {
         this.idCategoria = idCategoria;
+    }
+
+    public String getFotoObjeto() {
+        return fotoObjeto;
+    }
+
+    public void setFotoObjeto(String fotoObjeto) {
+        this.fotoObjeto = fotoObjeto;
+    }
+
+    public String getDescripcionIaObjeto() {
+        return descripcionIaObjeto;
+    }
+
+    public void setDescripcionIaObjeto(String descripcionIaObjeto) {
+        this.descripcionIaObjeto = descripcionIaObjeto;
     }
 }

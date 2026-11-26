@@ -56,12 +56,17 @@
                     </mat-form-field>
 
                     <mat-slide-toggle formControlName="activoObjeto" class="full">Objeto activo</mat-slide-toggle>
+
+                    <!-- HUF19: tomar o subir la foto, se comprime en el navegador -->
+                    <div class="full">
+                        <app-fotocomponent (fotoLista)="foto.set($event)"></app-fotocomponent>
+                    </div>
                 </div>
 
                 <div class="form-acciones">
                     <a matButton routerLink="/objetos/listar">Cancelar</a>
                     <button matButton="filled" type="submit" [disabled]="guardando()">
-                        <mat-icon>save</mat-icon> Registrar
+                        <mat-icon>save</mat-icon> {{ guardando() ? (foto() ? 'Guardando y describiendo foto...' : 'Guardando...') : 'Registrar' }}
                     </button>
                 </div>
             </form>
