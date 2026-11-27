@@ -56,7 +56,9 @@
     <mat-menu #menuCuenta="matMenu">
         @if (lS.esAdmin()) {
             <button mat-menu-item routerLink="/usuarios/informacion"><mat-icon>bar_chart</mat-icon>Información</button>
+            <button mat-menu-item routerLink="/notificaciones/insertar"><mat-icon>notification_add</mat-icon>Registrar notificación</button>
         }
+        <button mat-menu-item routerLink="/notificaciones/listar"><mat-icon>notifications</mat-icon>Notificaciones</button>
         <button mat-menu-item (click)="cerrarSesion()"><mat-icon>logout</mat-icon>Cerrar sesión</button>
     </mat-menu>
 </mat-toolbar>
