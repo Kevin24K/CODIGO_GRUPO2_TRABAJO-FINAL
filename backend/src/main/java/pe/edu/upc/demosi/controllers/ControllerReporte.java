@@ -13,6 +13,7 @@ import pe.edu.upc.demosi.entities.Objeto;
 import pe.edu.upc.demosi.entities.Reporte;
 import pe.edu.upc.demosi.entities.Usuario;
 import pe.edu.upc.demosi.exceptions.ResourceNotFoundException;
+import pe.edu.upc.demosi.servicesinterfaces.ICoincidenciaAutomaticaService;
 import pe.edu.upc.demosi.servicesinterfaces.IEstadoReporteService;
 import pe.edu.upc.demosi.servicesinterfaces.IObjetoService;
 import pe.edu.upc.demosi.servicesinterfaces.IReporteService;
@@ -31,9 +32,12 @@ public class ControllerReporte {
     private final IEstadoReporteService eR;
     private final IObjetoService oS;
     private final ModelMapper modelMapper;
+    private final ICoincidenciaAutomaticaService caS; // Notificaciones automáticas
 
-    public ControllerReporte(IReporteService rS, ModelMapper modelMapper, IEstadoReporteService eR, IObjetoService oS, IUsuarioService uS) {
+    public ControllerReporte(IReporteService rS, ModelMapper modelMapper, IEstadoReporteService eR, IObjetoService oS, IUsuarioService uS,
+                             ICoincidenciaAutomaticaService caS) {
         this.rS = rS;
+        this.caS = caS;
         this.uS = uS;
         this.eR = eR;
         this.oS = oS;
@@ -78,6 +82,13 @@ public class ControllerReporte {
 
         // 3. Guardamos
         rS.insert(repS);
+
+        // Notificaciones: compara con los reportes del tipo contrario y avisa si hay >= 80 %
+        try {
+            caS.procesarReporte(repS);
+        } catch (Exception e) {
+            // Si falla la comparación, el reporte igual queda registrado
+        }
 
         // 4. Mapeamos a la respuesta y le inyectamos los IDs
         ReporteDTCinsert responseDTO = modelMapper.map(repS, ReporteDTCinsert.class);
