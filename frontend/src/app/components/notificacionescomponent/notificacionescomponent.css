@@ -1,0 +1,30 @@
+.page-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.guia { padding: 20px 24px; border-radius: 14px !important; margin-bottom: 20px; background: #ffffff; }
+.guia h3 { margin: 0 0 8px; color: #12324a; }
+.guia ol { margin: 0 0 12px; padding-left: 20px; color: #37474f; line-height: 1.6; }
+.guia-acciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.lista { display: flex; flex-direction: column; gap: 12px; }
+.item { display: flex; flex-direction: row !important; flex-wrap: wrap; align-items: center; gap: 16px; padding: 14px 16px; border-radius: 12px !important; }
+.item.no-leida { border-left: 0; background: #fffaf0; box-shadow: inset 0 0 0 2px #f2a900; }
+.foto { width: 84px; height: 84px; flex: none; border: 0; padding: 0; border-radius: 10px; overflow: hidden; background: #f4f7fa; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.foto img { width: 100%; height: 100%; object-fit: cover; }
+.sin-foto { cursor: default; color: #90a4ae; }
+.info { flex: 1 1 280px; min-width: 0; }
+.titulo { display: flex; align-items: center; gap: 8px; color: #12324a; }
+.punto { width: 10px; height: 10px; border-radius: 50%; background: #c62828; flex: none; }
+.mensaje { margin: 6px 0; color: #37474f; }
+.desc-ia { margin: 4px 0; display: flex; align-items: flex-start; gap: 4px; color: #8a5a00; font-size: 13px; }
+.desc-ia mat-icon { font-size: 16px; width: 16px; height: 16px; margin-top: 2px; flex: none; }
+.chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.fecha { font-size: 12px; color: #607d8b; }
+.lado { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; min-width: 120px; }
+.pct { font-size: 26px; font-weight: 700; color: #1b6e3d; }
+.pct-label { font-size: 12px; color: #607d8b; }
+.vacio { margin-top: 24px; color: #607d8b; text-align: center; }
+
+.push { display: flex; flex-direction: row !important; flex-wrap: wrap; align-items: center; gap: 14px; padding: 16px 20px; border-radius: 14px !important; margin-bottom: 20px; }
+.push-icono { color: #f2a900; font-size: 32px; width: 32px; height: 32px; }
+.push-texto { flex: 1 1 280px; display: flex; flex-direction: column; gap: 2px; color: #37474f; }
+.push-texto strong { color: #12324a; }
+.push-texto .ok { color: #1b6e3d; }
+.push-texto .mal { color: #b3261e; }
