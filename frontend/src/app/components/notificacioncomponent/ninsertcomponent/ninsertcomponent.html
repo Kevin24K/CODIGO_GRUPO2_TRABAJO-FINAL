@@ -1,0 +1,87 @@
+<div class="page">
+    <div class="page-header">
+        <h2><mat-icon>notifications_active</mat-icon> Registrar Notificación</h2>
+    </div>
+
+    <mat-card class="form-card">
+        <mat-card-content>
+            <form [formGroup]="form" (ngSubmit)="registrar()">
+                <div class="form-grid">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Título</mat-label>
+                        <input matInput formControlName="tituloNotificacion" placeholder="Ej: Posible coincidencia encontrada">
+                        @if (form.get('tituloNotificacion')?.hasError('required')) {
+                            <mat-error>El título es obligatorio</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tipo de notificación</mat-label>
+                        <mat-select formControlName="tipoNotificacion">
+                            @for (t of tipos; track t) {
+                                <mat-option [value]="t">{{ t }}</mat-option>
+                            }
+                        </mat-select>
+                        @if (form.get('tipoNotificacion')?.hasError('required')) {
+                            <mat-error>Elige un tipo</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Usuario destinatario</mat-label>
+                        <mat-select formControlName="idUsuario">
+                            @for (u of usuarios(); track u.idUsuario) {
+                                <mat-option [value]="u.idUsuario">
+                                    {{ u.nombre }} {{ u.apellido }} ({{ u.correo }})
+                                </mat-option>
+                            }
+                        </mat-select>
+                        @if (usuarios().length === 0) {
+                            <mat-hint>No hay usuarios activos disponibles</mat-hint>
+                        }
+                        @if (form.get('idUsuario')?.hasError('required')) {
+                            <mat-error>Elige un usuario</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Coincidencia asociada</mat-label>
+                        <mat-select formControlName="idCoincidencia">
+                            @for (c of coincidencias(); track c.idCoincidencia) {
+                                <mat-option [value]="c.idCoincidencia">
+                                    #{{ c.idCoincidencia }} — {{ c.porcentajeSimilitudC }}% ({{ c.detalleC }})
+                                </mat-option>
+                            }
+                        </mat-select>
+                        @if (coincidencias().length === 0) {
+                            <mat-hint>Primero registra una coincidencia</mat-hint>
+                        }
+                        @if (form.get('idCoincidencia')?.hasError('required')) {
+                            <mat-error>Elige una coincidencia</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full">
+                        <mat-label>Mensaje</mat-label>
+                        <textarea matInput formControlName="mensajeNotificacion" rows="3"
+                            placeholder="Ej: Se encontró un objeto con alta similitud a tu reporte perdido..."></textarea>
+                        @if (form.get('mensajeNotificacion')?.hasError('required')) {
+                            <mat-error>El mensaje es obligatorio</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-slide-toggle formControlName="leidaNotificacion" class="full">
+                        Marcar como leída
+                    </mat-slide-toggle>
+                </div>
+
+                <div class="form-acciones">
+                    <a matButton routerLink="/notificaciones/listar">Cancelar</a>
+                    <button matButton="filled" type="submit" [disabled]="guardando()">
+                        <mat-icon>save</mat-icon> Registrar
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
