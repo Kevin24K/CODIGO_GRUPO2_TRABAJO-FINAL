@@ -7,7 +7,7 @@
         <p class="peso"><mat-icon>compress</mat-icon> Foto optimizada: <strong>{{ iS.pesoKb(data.objeto.fotoObjeto) }} KB</strong> (JPEG)</p>
         <div class="desc-ia">
             <span class="etiqueta"><mat-icon>auto_awesome</mat-icon> Descripción generada por IA</span>
-            <p>{{ data.objeto.descripcionIaObjeto || 'Sin descripción de la IA (revisa el token de Hugging Face).' }}</p>
+            <p>{{ data.objeto.descripcionIaObjeto || 'Sin descripción de la IA (revisa la API key de Gemini).' }}</p>
         </div>
     } @else {
         <app-fotocomponent (fotoLista)="nueva.set($event)"></app-fotocomponent>

@@ -13,6 +13,8 @@ import { Rinsertcomponent } from './components/reportecomponent/rinsertcomponent
 import { Usuariocomponent } from './components/usuariocomponent/usuariocomponent';
 import { Ulistcomponent } from './components/usuariocomponent/ulistcomponent/ulistcomponent';
 import { Uinsertcomponent } from './components/usuariocomponent/uinsertcomponent/uinsertcomponent';
+import { Landingcomponent } from './components/landingcomponent/landingcomponent';
+import { Notificacionescomponent } from './components/notificacionescomponent/notificacionescomponent';
 import { Busquedacomponent } from './components/busquedacomponent/busquedacomponent';
 import { authGuard,adminGuard } from './guards/authguard';
 import { Infocomponent } from './components/usuariocomponent/infocomponent/infocomponent';
@@ -25,7 +27,12 @@ export const routes: Routes = [
         component: Logincomponent
     },
     {
-        path: '',
+        path: '', // Landing pública
+        component: Landingcomponent,
+        pathMatch: 'full'
+    },
+    {
+        path: 'inicio', // Panel principal (antes estaba en '')
         component: Homecomponent,
         canActivate: [authGuard]
     },
@@ -82,6 +89,11 @@ export const routes: Routes = [
     {
         path: 'buscar', // HUF17: búsqueda de coincidencias por descripción
         component: Busquedacomponent,
+        canActivate: [authGuard],
+    },
+    {
+        path: 'notificaciones', // Avisos de coincidencias >= 80 %
+        component: Notificacionescomponent,
         canActivate: [authGuard],
     },
     {

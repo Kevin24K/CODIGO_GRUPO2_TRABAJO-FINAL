@@ -1,0 +1,191 @@
+<!-- Landing pública (diseñada en Claude Design) conectada al sistema -->
+<div style="font-family: Inter, system-ui, sans-serif; color: #263238; background: #f4f7fa; min-width: 0">
+
+<header style="background: #12324a; border-bottom: 3px solid #f2a900">
+<nav aria-label="Principal" style="max-width: 1160px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="#inicio" (click)="ir($event, 'inicio')" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #ffffff">
+<svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true"><circle cx="17" cy="17" r="17" fill="#f2a900"></circle><circle cx="15" cy="15" r="6.5" stroke="#12324a" stroke-width="2.4"></circle><path d="M20 20l5.5 5.5" stroke="#12324a" stroke-width="2.4" stroke-linecap="round"></path></svg>
+<span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.2px">Lost &amp; Found IA</span>
+</a>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<a href="#como-funciona" (click)="ir($event, 'como-funciona')" style="color: #dbe7f0; text-decoration: none; font-size: 15px; font-weight: 500; padding: 12px 12px">Cómo funciona</a>
+<a href="#funciones" (click)="ir($event, 'funciones')" style="color: #dbe7f0; text-decoration: none; font-size: 15px; font-weight: 500; padding: 12px 12px">Funciones</a>
+<a href="#para-quien" (click)="ir($event, 'para-quien')" style="color: #dbe7f0; text-decoration: none; font-size: 15px; font-weight: 500; padding: 12px 12px">Para quién</a>
+@if (logueado) {
+<a routerLink="/notificaciones" class="campana-landing" style="color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; padding: 11px 14px">Notificaciones</a>
+<a routerLink="/inicio" style="color: #12324a; background: #f2a900; text-decoration: none; font-size: 15px; font-weight: 700; padding: 11px 18px; border-radius: 999px">Ir a mi panel</a>
+} @else {
+<a routerLink="/login" style="color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; padding: 11px 18px; border: 1.5px solid #5d7d94; border-radius: 999px">Iniciar sesión</a>
+}
+</div>
+</nav>
+</header>
+
+<section id="inicio" style="background: #12324a; color: #ffffff">
+<div style="max-width: 1160px; margin: 0 auto; padding: 72px 24px 96px; display: flex; flex-wrap: wrap; align-items: center; gap: 56px">
+<div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 22px">
+<p style="margin: 0; font-size: 14px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: #f2a900">Objetos perdidos y encontrados · Campus universitario</p>
+<h1 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 54px; line-height: 1.08; letter-spacing: -1px">Lo que pierdes en el campus, vuelve a ti.</h1>
+<p style="margin: 0; font-size: 18px; line-height: 1.6; color: #cfdde8; max-width: 540px">Lost &amp; Found IA reúne en un solo lugar los reportes de objetos perdidos y encontrados, y usa inteligencia artificial para sugerir qué reportes se refieren al mismo objeto.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px">
+<a routerLink="/reportes/insertar" style="background: #f2a900; color: #12324a; text-decoration: none; font-weight: 700; font-size: 16px; padding: 15px 26px; border-radius: 999px">Reportar un objeto</a>
+<a routerLink="/buscar" style="background: #ffffff; color: #12324a; text-decoration: none; font-weight: 700; font-size: 16px; padding: 15px 26px; border-radius: 999px">Buscar mi objeto</a>
+<a href="#como-funciona" (click)="ir($event, 'como-funciona')" style="color: #ffffff; text-decoration: none; font-weight: 600; font-size: 16px; padding: 14px 24px; border-radius: 999px; border: 1.5px solid #5d7d94">Ver cómo funciona</a>
+</div>
+</div>
+
+<div style="flex: 1 1 400px; min-width: 0; display: flex; justify-content: center">
+<div style="width: 100%; max-width: 440px; background: #ffffff; color: #263238; border-radius: 18px; padding: 24px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35); display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<p style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 17px; color: #12324a">Coincidencia sugerida</p>
+<span style="font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: #e4eef5; color: #12324a">Ejemplo</span>
+</div>
+<div style="border: 1px solid #d5e1ea; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px">
+<span style="align-self: flex-start; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; padding: 3px 10px; border-radius: 999px; background: #fff1d1; color: #7a4f00">PERDIDO</span>
+<p style="margin: 0; font-weight: 600; font-size: 15px">Mochila negra Totto con llavero azul</p>
+<p style="margin: 0; font-size: 13px; color: #546e7a">Biblioteca, 2.º piso · 03/11 · 10:15</p>
+</div>
+<div style="border: 1px solid #d5e1ea; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px">
+<span style="align-self: flex-start; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; padding: 3px 10px; border-radius: 999px; background: #dcecff; color: #134c8c">ENCONTRADO</span>
+<p style="margin: 0; font-weight: 600; font-size: 15px">Mochila negra, marca Totto, llavero azul</p>
+<p style="margin: 0; font-size: 13px; color: #546e7a">Pabellón C · 03/11 · 12:40</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #12324a"><span>Similitud de la descripción</span><span>92 %</span></div>
+<div style="height: 8px; border-radius: 999px; background: #e4eef5; overflow: hidden"><div style="width: 92%; height: 8px; background: #f2a900"></div></div>
+</div>
+<p style="margin: 0; display: flex; align-items: center; gap: 8px; background: #12324a; color: #ffffff; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f2a900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg>Notificación enviada al dueño (similitud ≥ 80 %)</p>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="problema-titulo" style="max-width: 1160px; margin: 0 auto; padding: 88px 24px 24px; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-direction: column; gap: 12px; max-width: 720px">
+<p style="margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #8a5a00">El problema</p>
+<h2 id="problema-titulo" style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 38px; line-height: 1.15; color: #12324a">Hoy, encontrar un objeto perdido depende de la suerte.</h2>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px">
+<div style="background: #ffffff; border: 1px solid #d5e1ea; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 10px">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#12324a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+<h3 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; color: #12324a">Avisos dispersos</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #455a64">Los avisos se pierden entre grupos de chat, carteles y oficinas distintas del campus.</p>
+</div>
+<div style="background: #ffffff; border: 1px solid #d5e1ea; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 10px">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#12324a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18M9 4v16"></path></svg>
+<h3 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; color: #12324a">Sin un registro central</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #455a64">No existe un lugar único donde consultar qué se perdió, qué se encontró y en qué estado está cada caso.</p>
+</div>
+<div style="background: #ffffff; border: 1px solid #d5e1ea; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 10px">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#12324a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3M8.5 11h5"></path></svg>
+<h3 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; color: #12324a">Coincidencias a mano</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #455a64">Relacionar un objeto perdido con uno encontrado exige revisar descripciones una por una.</p>
+</div>
+</div>
+</section>
+
+<section id="como-funciona" aria-labelledby="como-titulo" style="max-width: 1160px; margin: 0 auto; padding: 88px 24px 24px; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-direction: column; gap: 12px; max-width: 720px">
+<p style="margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #8a5a00">Cómo funciona</p>
+<h2 id="como-titulo" style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 38px; line-height: 1.15; color: #12324a">Tres pasos para recuperar lo tuyo.</h2>
+</div>
+<ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px">
+<li style="background: #12324a; color: #ffffff; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<span style="width: 44px; height: 44px; border-radius: 50%; background: #f2a900; color: #12324a; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 20px">1</span>
+<h3 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 21px">Reporta</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #cfdde8">Registra si perdiste o encontraste algo: categoría, color, marca, descripción, fecha y hora del evento.</p>
+</li>
+<li style="background: #12324a; color: #ffffff; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<span style="width: 44px; height: 44px; border-radius: 50%; background: #f2a900; color: #12324a; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 20px">2</span>
+<h3 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 21px">La IA compara</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #cfdde8">El sistema analiza las descripciones con procesamiento de lenguaje natural y calcula un porcentaje de similitud entre reportes.</p>
+</li>
+<li style="background: #12324a; color: #ffffff; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<span style="width: 44px; height: 44px; border-radius: 50%; background: #f2a900; color: #12324a; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 20px">3</span>
+<h3 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 21px">Recibe el aviso</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #cfdde8">Si un objeto encontrado se parece en un 80 % o más a lo que reportaste, te llega una notificación con su foto.</p>
+</li>
+</ol>
+</section>
+
+<section id="funciones" aria-labelledby="funciones-titulo" style="max-width: 1160px; margin: 0 auto; padding: 88px 24px 24px; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-direction: column; gap: 12px; max-width: 720px">
+<p style="margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #8a5a00">Funciones</p>
+<h2 id="funciones-titulo" style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 38px; line-height: 1.15; color: #12324a">Todo lo que necesitas en una sola plataforma.</h2>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px">
+<div style="background: #ffffff; border: 1px solid #d5e1ea; border-radius: 16px; padding: 24px; display: flex; gap: 16px; align-items: flex-start">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#12324a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="M9 4h6l1 2h3v15H5V6h3z"></path><path d="M9 12h6M9 16h4"></path></svg>
+<div style="display: flex; flex-direction: column; gap: 6px"><h3 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #12324a">Reportes de perdidos y encontrados</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #455a64">Cada reporte guarda el objeto, el usuario, la fecha, la hora y su estado.</p></div>
+</div>
+<div style="background: #ffffff; border: 1px solid #d5e1ea; border-radius: 16px; padding: 24px; display: flex; gap: 16px; align-items: flex-start">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#12324a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
+<div style="display: flex; flex-direction: column; gap: 6px"><h3 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #12324a">Categorías de objetos</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #455a64">Electrónicos, documentos, ropa y más, para buscar y filtrar rápido.</p></div>
+</div>
+<div style="background: #ffffff; border: 1px solid #d5e1ea; border-radius: 16px; padding: 24px; display: flex; gap: 16px; align-items: flex-start">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#12324a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="M8 7h12M8 12h12M8 17h12"></path><path d="M3.5 7l1 1 2-2M3.5 12l1 1 2-2"></path></svg>
+<div style="display: flex; flex-direction: column; gap: 6px"><h3 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #12324a">Coincidencias con IA</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #455a64">Sugerencias ordenadas por porcentaje de similitud, con su estado de revisión.</p></div>
+</div>
+<div style="background: #ffffff; border: 1px solid #d5e1ea; border-radius: 16px; padding: 24px; display: flex; gap: 16px; align-items: flex-start">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#12324a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg>
+<div style="display: flex; flex-direction: column; gap: 6px"><h3 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #12324a">Notificaciones</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #455a64">Avisos automáticos cuando aparece un objeto con 80 % o más de similitud con tu reporte.</p></div>
+</div>
+<div style="background: #ffffff; border: 1px solid #d5e1ea; border-radius: 16px; padding: 24px; display: flex; gap: 16px; align-items: flex-start">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#12324a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M17 11h5M19.5 8.5v5"></path></svg>
+<div style="display: flex; flex-direction: column; gap: 6px"><h3 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #12324a">Usuarios y roles</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #455a64">Estudiantes y administradores, cada uno con los permisos que le corresponden.</p></div>
+</div>
+<div style="background: #ffffff; border: 1px solid #d5e1ea; border-radius: 16px; padding: 24px; display: flex; gap: 16px; align-items: flex-start">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#12324a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+<div style="display: flex; flex-direction: column; gap: 6px"><h3 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #12324a">Acceso seguro</h3><p style="margin: 0; font-size: 15px; line-height: 1.55; color: #455a64">Inicio de sesión con correo institucional y token JWT para proteger los datos.</p></div>
+</div>
+</div>
+</section>
+
+<section id="para-quien" aria-labelledby="quien-titulo" style="max-width: 1160px; margin: 0 auto; padding: 88px 24px 24px; display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start">
+<div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #8a5a00">Para quién</p>
+<h2 id="quien-titulo" style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 38px; line-height: 1.15; color: #12324a">Pensado para toda la comunidad universitaria.</h2>
+</div>
+<div style="flex: 2 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<div style="background: #ffffff; border: 1px solid #d5e1ea; border-radius: 14px; padding: 20px 24px; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline">
+<h3 style="margin: 0; flex: 0 0 210px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #12324a">Estudiantes</h3>
+<p style="margin: 0; flex: 1 1 260px; font-size: 15px; line-height: 1.55; color: #455a64">Reportan lo que perdieron o encontraron desde cualquier dispositivo y siguen el estado de su caso.</p>
+</div>
+<div style="background: #ffffff; border: 1px solid #d5e1ea; border-radius: 14px; padding: 20px 24px; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline">
+<h3 style="margin: 0; flex: 0 0 210px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #12324a">Personal administrativo</h3>
+<p style="margin: 0; flex: 1 1 260px; font-size: 15px; line-height: 1.55; color: #455a64">Gestiona categorías, usuarios y estados de los reportes desde un solo panel.</p>
+</div>
+<div style="background: #ffffff; border: 1px solid #d5e1ea; border-radius: 14px; padding: 20px 24px; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline">
+<h3 style="margin: 0; flex: 0 0 210px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #12324a">Seguridad del campus</h3>
+<p style="margin: 0; flex: 1 1 260px; font-size: 15px; line-height: 1.55; color: #455a64">Registra los objetos que llegan a su oficina para que sus dueños los encuentren.</p>
+</div>
+</div>
+</section>
+
+<section id="reportar" style="max-width: 1160px; margin: 0 auto; padding: 88px 24px">
+<div style="background: #f2a900; border-radius: 22px; padding: 48px 40px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px">
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 34px; line-height: 1.15; color: #12324a">¿Perdiste o encontraste algo hoy?</h2>
+<p style="margin: 0; font-size: 17px; line-height: 1.55; color: #2b3a44">Regístralo en menos de un minuto y deja que el sistema busque la coincidencia por ti.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<a href="#inicio" (click)="ir($event, 'inicio')" style="background: #12324a; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 16px; padding: 15px 26px; border-radius: 999px">Reportar un objeto</a>
+<a href="#inicio" (click)="ir($event, 'inicio')" style="background: #ffffff; color: #12324a; text-decoration: none; font-weight: 700; font-size: 16px; padding: 15px 26px; border-radius: 999px">Iniciar sesión</a>
+</div>
+</div>
+</section>
+
+<footer style="background: #12324a; color: #cfdde8">
+<div style="max-width: 1160px; margin: 0 auto; padding: 36px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px 32px; font-size: 14px; line-height: 1.6">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 17px; color: #ffffff">Lost &amp; Found IA</span>
+<span>Curso Arquitectura de Aplicaciones Web · UPC · Grupo 2</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="color: #ffffff; font-weight: 600">Tecnologías</span>
+<span>Spring Boot · PostgreSQL · Angular · JWT · Gemini + Smile</span>
+</div>
+</div>
+</footer>
+
+</div>

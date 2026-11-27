@@ -1,0 +1,10 @@
+:host { display: block; background: #f4f7fa; }
+a { color: #12324a; }
+a:hover { opacity: 0.92; }
+a:focus-visible { outline: 3px solid #f2a900; outline-offset: 3px; }
+section[id] { scroll-margin-top: 16px; }
+
+@media (max-width: 640px) {
+  h1 { font-size: 38px !important; }
+  h2 { font-size: 30px !important; }
+}

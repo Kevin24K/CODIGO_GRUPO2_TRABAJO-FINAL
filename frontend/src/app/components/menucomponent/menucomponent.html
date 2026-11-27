@@ -1,5 +1,5 @@
 <mat-toolbar>
-    <button matIconButton routerLink="/" aria-label="Inicio">
+    <button matIconButton routerLink="/inicio" aria-label="Inicio">
         <mat-icon>home</mat-icon>
     </button>
     <span class="marca">Lost &amp; Found IA</span>
@@ -40,6 +40,25 @@
     }
 
     <span class="espacio"></span>
+
+    <!-- Notificaciones: coincidencias >= 80 % con mis reportes -->
+    <button matIconButton [matMenuTriggerFor]="menuNoti" (menuOpened)="cargarUltimas()"
+        matTooltip="Notificaciones" aria-label="Notificaciones">
+        <mat-icon [matBadge]="nS.noLeidas()" [matBadgeHidden]="nS.noLeidas() === 0" matBadgeColor="warn"
+            matBadgeSize="small" aria-hidden="false">notifications</mat-icon>
+    </button>
+    <mat-menu #menuNoti="matMenu" class="menu-noti" xPosition="before">
+        <div class="noti-cabecera">Notificaciones</div>
+        @for (n of ultimas(); track n.idNotificacion) {
+            <button mat-menu-item class="noti-item" [class.no-leida]="!n.leidaNotificacion" (click)="abrir(n)">
+                <span class="noti-pct">{{ n.porcentaje }} %</span>
+                <span class="noti-texto">{{ n.tituloNotificacion }}</span>
+            </button>
+        } @empty {
+            <div class="noti-vacio">Aún no tienes notificaciones</div>
+        }
+        <button mat-menu-item routerLink="/notificaciones"><mat-icon>list</mat-icon>Ver todas</button>
+    </mat-menu>
 
     <button matButton [matMenuTriggerFor]="menuCuenta" class="cuenta">
         <mat-icon>account_circle</mat-icon>
