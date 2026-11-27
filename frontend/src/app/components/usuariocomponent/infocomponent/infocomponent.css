@@ -1,0 +1,25 @@
+.informe-wrapper {
+  padding: 20px;
+}
+
+.informe-header {
+  margin-bottom: 20px;
+}
+
+.informe-header h2 {
+  margin: 0 0 4px;
+  color: #1e293b;
+}
+
+.informe-subtitulo {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.informe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 20px;
+  align-items: start;
+}

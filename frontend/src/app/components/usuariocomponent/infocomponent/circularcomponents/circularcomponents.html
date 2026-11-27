@@ -1,0 +1,19 @@
+  <div class="chart-card">
+    <div class="resumen-top">
+      <span class="badge-tasa">Tasa de recuperación: {{ tasaRecuperacion }}%</span>
+    </div>
+    @if (!cargando && circularData.datasets[0].data.length > 0) {
+      <div class="chart-box">
+        <canvas
+          baseChart
+          [data]="circularData"
+          [options]="circularOptions"
+          [type]="circularType">
+        </canvas>
+      </div>
+    } @else if (!cargando) {
+      <p class="mensaje-estado" role="status">
+        No hay datos suficientes para mostrar la tasa de recuperación y estado.
+      </p>
+    }
+  </div>

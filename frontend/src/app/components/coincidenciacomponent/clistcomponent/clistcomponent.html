@@ -1,0 +1,91 @@
+<div class="page">
+    <div class="page-header">
+        <h2><mat-icon>compare_arrows</mat-icon> Gestión de Coincidencias</h2>
+        <div class="header-acciones">
+            @if (pendientesCount() > 0) {
+                <span class="chip chip-pendiente">Pendientes: {{ pendientesCount() }}</span>
+            }
+            <button matButton="outlined" type="button" (click)="toggleSoloPendientes()">
+                <mat-icon>{{ soloPendientes() ? 'filter_alt_off' : 'filter_alt' }}</mat-icon>
+                {{ soloPendientes() ? 'Ver todas' : 'Solo pendientes' }}
+            </button>
+            <a matButton="filled" routerLink="/coincidencias/insertar">
+                <mat-icon>add</mat-icon> Registrar coincidencia
+            </a>
+        </div>
+    </div>
+
+    <div class="tabla-wrap">
+        <table mat-table [dataSource]="dataSource" class="tabla">
+            <ng-container matColumnDef="c1">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.idCoincidencia}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c2">
+                <th mat-header-cell *matHeaderCellDef> Similitud </th>
+                <td mat-cell *matCellDef="let element">
+                    <span class="chip"
+                        [class.chip-ok]="element.porcentajeSimilitudC >= 75"
+                        [class.chip-pendiente]="element.porcentajeSimilitudC >= 50 && element.porcentajeSimilitudC < 75"
+                        [class.chip-no]="element.porcentajeSimilitudC < 50">
+                        <strong>{{element.porcentajeSimilitudC}}%</strong>
+                    </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c3">
+                <th mat-header-cell *matHeaderCellDef> Detalle de la coincidencia </th>
+                <td mat-cell *matCellDef="let element"> {{element.detalleC}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c4">
+                <th mat-header-cell *matHeaderCellDef> Fecha de generación </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.fechaGeneracionC | date:'dd/MM/yyyy HH:mm'}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c5">
+                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                <td mat-cell *matCellDef="let element">
+                    @if (estados().length > 0 && element.idEstadoCoincidencia) {
+                        <mat-form-field appearance="outline" class="select-estado">
+                            <mat-select [value]="element.idEstadoCoincidencia"
+                                (selectionChange)="cambiarEstado(element, $event.value)">
+                                @for (est of estados(); track est.idEstadoCoincidencia) {
+                                    <mat-option [value]="est.idEstadoCoincidencia">
+                                        {{ est.nombreEC }}
+                                    </mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    } @else {
+                        <span class="chip chip-neutro">
+                            {{ element.nombreEstadoCoincidencia ?? 'Registrada' }}
+                        </span>
+                    }
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c6">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let element">
+                    <button matIconButton class="btn-eliminar"
+                        (click)="eliminarCoincidencia(element)"
+                        aria-label="Eliminar coincidencia">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="sin-datos" [attr.colspan]="displayedColumns.length">
+                    {{ soloPendientes() ? 'No hay coincidencias pendientes por revisar' : 'No hay coincidencias registradas' }}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

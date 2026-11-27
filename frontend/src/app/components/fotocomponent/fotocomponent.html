@@ -1,0 +1,47 @@
+<div class="foto-box">
+    <div class="foto-titulo">
+        <mat-icon>photo_camera</mat-icon>
+        <span>Evidencia fotográfica</span>
+    </div>
+
+    @if (camaraActiva()) {
+        <!-- vista previa de la cámara -->
+        <video #video autoplay playsinline muted class="video"></video>
+        <div class="botones">
+            <button matButton type="button" (click)="cerrarCamara()">Cancelar</button>
+            <button matButton="filled" type="button" (click)="capturar()">
+                <mat-icon>camera</mat-icon> Capturar
+            </button>
+        </div>
+    } @else if (procesando()) {
+        <div class="cargando">
+            <mat-spinner diameter="32"></mat-spinner>
+            <span>Comprimiendo foto...</span>
+        </div>
+    } @else if (foto(); as f) {
+        <!-- foto ya comprimida -->
+        <img [src]="f.dataUrl" alt="Foto del objeto" class="preview">
+        <p class="peso">
+            Original: <strong>{{ f.kbOriginal }} KB</strong> →
+            Comprimida: <strong>{{ f.kbFinal }} KB</strong>
+            <span class="ahorro">(-{{ ahorro(f) }} %)</span>
+            · {{ f.ancho }}×{{ f.alto }} px
+        </p>
+        <button matButton type="button" (click)="quitar()"><mat-icon>delete</mat-icon> Quitar foto</button>
+    } @else {
+        <div class="botones">
+            <button matButton="outlined" type="button" (click)="abrirCamara()">
+                <mat-icon>photo_camera</mat-icon> Tomar foto
+            </button>
+            <label class="btn-subir">
+                <mat-icon>upload</mat-icon> Subir foto
+                <input type="file" accept="image/*" capture="environment" (change)="alElegirArchivo($event)" hidden>
+            </label>
+        </div>
+        <p class="ayuda">La foto se comprime antes de guardarse y la IA genera una breve descripción.</p>
+    }
+
+    @if (error()) {
+        <p class="error">{{ error() }}</p>
+    }
+</div>
