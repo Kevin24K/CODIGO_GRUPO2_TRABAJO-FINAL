@@ -39,6 +39,14 @@
         </mat-menu>
     }
 
+    <button matButton [matMenuTriggerFor]="menuNotificacion">Notificaciones</button>
+    <mat-menu #menuNotificacion="matMenu">
+        <button mat-menu-item routerLink="/notificaciones/listar"><mat-icon>list</mat-icon>Listar</button>
+        @if (lS.esAdminOStaff()) {
+            <button mat-menu-item routerLink="/notificaciones/insertar"><mat-icon>add</mat-icon>Registrar</button>
+        }
+    </mat-menu>
+
     <span class="espacio"></span>
 
     <button matButton [matMenuTriggerFor]="menuCuenta" class="cuenta">
