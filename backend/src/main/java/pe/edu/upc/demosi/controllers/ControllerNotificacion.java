@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pe.edu.upc.demosi.dtos.NotificacionDTCinsert;
 import pe.edu.upc.demosi.dtos.NotificacionDTCList;
+import pe.edu.upc.demosi.dtos.NotificacionDetalleDTO;
+import pe.edu.upc.demosi.dtos.PushTokenDTO;
+import pe.edu.upc.demosi.servicesinterfaces.IPushService;
+import pe.edu.upc.demosi.entities.Objeto;
+import pe.edu.upc.demosi.entities.Reporte;
 import pe.edu.upc.demosi.entities.Coincidencia;
 import pe.edu.upc.demosi.entities.Notificacion;
 import pe.edu.upc.demosi.entities.Usuario;
@@ -15,6 +20,9 @@ import pe.edu.upc.demosi.servicesinterfaces.INotificacionService;
 import pe.edu.upc.demosi.servicesinterfaces.IUsuarioService;
 
 import java.net.URI;
+import java.security.Principal;
+import java.util.Comparator;
+import java.util.Map;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +34,11 @@ public class ControllerNotificacion {
     private final IUsuarioService uS;
     private final ICoincidenciaService cS;
     private final ModelMapper modelMapper;
+    private final IPushService pS; // Firebase Cloud Messaging
 
-    public ControllerNotificacion(INotificacionService nS, IUsuarioService uS, ICoincidenciaService cS, ModelMapper modelMapper) {
+    public ControllerNotificacion(INotificacionService nS, IUsuarioService uS, ICoincidenciaService cS, ModelMapper modelMapper,
+                                 IPushService pS) {
+        this.pS = pS;
         this.nS = nS;
         this.uS = uS;
         this.cS = cS;
@@ -137,5 +148,120 @@ public class ControllerNotificacion {
         responseDTO.setIdCoincidencia(coincidencia.get().getIdCoincidencia());
 
         return ResponseEntity.ok(responseDTO);
+    }
+
+    // ================= Notificaciones del usuario conectado =================
+    // El correo sale del token JWT; si no hay token se puede mandar ?correo=
+
+    @GetMapping("/mias")
+    public ResponseEntity<List<NotificacionDetalleDTO>> misNotificaciones(
+            Principal principal, @RequestParam(required = false) String correo) {
+        Usuario usuario = usuarioActual(principal, correo);
+        List<NotificacionDetalleDTO> lista = nS.listarPorUsuario(usuario.getIdUsuario())
+                .stream()
+                .sorted(Comparator.comparing(Notificacion::getFechaCreacionN,
+                        Comparator.nullsLast(Comparator.naturalOrder())).reversed())
+                .map(this::aDetalle)
+                .toList();
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/mias/no-leidas")
+    public ResponseEntity<Map<String, Long>> cantidadNoLeidas(
+            Principal principal, @RequestParam(required = false) String correo) {
+        Usuario usuario = usuarioActual(principal, correo);
+        long cantidad = nS.listarPorUsuario(usuario.getIdUsuario()).stream()
+                .filter(n -> !Boolean.TRUE.equals(n.getLeidaNotificacion()))
+                .count();
+        return ResponseEntity.ok(Map.of("cantidad", cantidad));
+    }
+
+    @PutMapping("/{id}/leida")
+    public ResponseEntity<NotificacionDetalleDTO> marcarLeida(@PathVariable Long id) {
+        Notificacion n = nS.listId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No existe una notificación con el id: " + id));
+        n.setLeidaNotificacion(true);
+        nS.update(n);
+        return ResponseEntity.ok(aDetalle(n));
+    }
+
+    @PutMapping("/mias/leidas")
+    public ResponseEntity<Map<String, Long>> marcarTodasLeidas(
+            Principal principal, @RequestParam(required = false) String correo) {
+        Usuario usuario = usuarioActual(principal, correo);
+        long cambiadas = 0;
+        for (Notificacion n : nS.listarPorUsuario(usuario.getIdUsuario())) {
+            if (!Boolean.TRUE.equals(n.getLeidaNotificacion())) {
+                n.setLeidaNotificacion(true);
+                nS.update(n);
+                cambiadas++;
+            }
+        }
+        return ResponseEntity.ok(Map.of("cantidad", cambiadas));
+    }
+
+    // Firebase: el navegador manda su token FCM al activar las notificaciones push
+    @PostMapping("/push-token")
+    public ResponseEntity<Map<String, Object>> registrarTokenPush(
+            Principal principal, @RequestParam(required = false) String correo,
+            @Valid @RequestBody PushTokenDTO dto) {
+        Usuario usuario = usuarioActual(principal, correo);
+        pS.registrarToken(usuario, dto.getToken());
+        return ResponseEntity.ok(Map.of("registrado", true, "firebaseActivo", pS.activo()));
+    }
+
+    @DeleteMapping("/push-token")
+    public ResponseEntity<Void> eliminarTokenPush(@RequestParam String token) {
+        pS.eliminarToken(token);
+        return ResponseEntity.noContent().build();
+    }
+
+    private Usuario usuarioActual(Principal principal, String correo) {
+        String email = (principal != null && principal.getName() != null) ? principal.getName() : correo;
+        if (email == null || email.isBlank()) {
+            throw new ResourceNotFoundException("No se pudo identificar al usuario (inicia sesión)");
+        }
+        return uS.list().stream()
+                .filter(u -> email.equalsIgnoreCase(u.getCorreo()))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("No existe un usuario con el correo: " + email));
+    }
+
+    private NotificacionDetalleDTO aDetalle(Notificacion n) {
+        NotificacionDetalleDTO d = new NotificacionDetalleDTO();
+        d.setIdNotificacion(n.getIdNotificacion());
+        d.setTituloNotificacion(n.getTituloNotificacion());
+        d.setMensajeNotificacion(n.getMensajeNotificacion());
+        d.setTipoNotificacion(n.getTipoNotificacion());
+        d.setLeidaNotificacion(n.getLeidaNotificacion());
+        d.setFechaCreacionN(n.getFechaCreacionN());
+        Coincidencia c = n.getCoincidencia();
+        if (c != null) {
+            d.setIdCoincidencia(c.getIdCoincidencia());
+            d.setPorcentaje(c.getPorcentajeSimilitudC());
+            if (c.getEstadoCoincidencia() != null) d.setEstadoCoincidencia(c.getEstadoCoincidencia().getNombreEC());
+            Reporte perdido = c.getReportePerdido();
+            if (perdido != null) {
+                d.setIdReportePerdido(perdido.getIdReporte());
+                if (perdido.getObjeto() != null) d.setObjetoPerdido(perdido.getObjeto().getNombreObjeto());
+            }
+            Reporte encontrado = c.getReporteEncontrado();
+            if (encontrado != null) {
+                d.setIdReporteEncontrado(encontrado.getIdReporte());
+                d.setFechaEncontrado(encontrado.getFechaeventoR());
+                Objeto o = encontrado.getObjeto();
+                if (o != null) {
+                    d.setIdObjetoEncontrado(o.getIdObjeto());
+                    d.setObjetoEncontrado(o.getNombreObjeto());
+                    d.setDescripcionEncontrado(o.getDescripcionObjeto());
+                    d.setDescripcionIaEncontrado(o.getDescripcionIaObjeto());
+                    d.setColorEncontrado(o.getColorObjeto());
+                    d.setMarcaEncontrado(o.getMarcaObjeto());
+                    d.setFotoEncontrado(o.getFotoObjeto());
+                    if (o.getCategoria() != null) d.setCategoriaEncontrado(o.getCategoria().getNombreCategoria());
+                }
+            }
+        }
+        return d;
     }
 }

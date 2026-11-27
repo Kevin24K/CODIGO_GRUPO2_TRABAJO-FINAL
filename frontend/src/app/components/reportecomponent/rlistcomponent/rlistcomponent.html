@@ -1,84 +1,72 @@
 <div class="page">
-  <div class="page-header">
-    <h2><mat-icon>assignment</mat-icon> Lista de Reportes</h2>
-    <div class="header-acciones">
-      <mat-button-toggle-group
-        [value]="tipoSeleccionado()"
-        (change)="onCambiarTipo($event.value)"
-        aria-label="Filtrar reportes por tipo de incidente">
-        <mat-button-toggle value="TODOS">Todos</mat-button-toggle>
-        <mat-button-toggle value="PERDIDO">Perdido</mat-button-toggle>
-        <mat-button-toggle value="ENCONTRADO">Encontrado</mat-button-toggle>
-      </mat-button-toggle-group>
-
-      <a matButton="filled" routerLink="/reportes/insertar">
-        <mat-icon>add</mat-icon> Registrar reporte
-      </a>
+    <div class="page-header">
+        <h2><mat-icon>assignment</mat-icon> Lista de Reportes</h2>
+        <a matButton="filled" routerLink="/reportes/insertar"><mat-icon>add</mat-icon> Registrar reporte</a>
     </div>
   </div>
 
-  <div class="tabla-wrap">
-    <table mat-table [dataSource]="dataSource" class="tabla">
-      <ng-container matColumnDef="c1">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let element"> {{element.idReporte}} </td>
-      </ng-container>
-      <ng-container matColumnDef="c2">
-        <th mat-header-cell *matHeaderCellDef> Tipo </th>
-        <td mat-cell *matCellDef="let element">
-          <span class="chip" [class.chip-perdido]="esPerdido(element.tipoReporte)"
-            [class.chip-encontrado]="!esPerdido(element.tipoReporte)">
-            {{element.tipoReporte}}
-          </span>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="c3">
-        <th mat-header-cell *matHeaderCellDef> Fecha y hora del evento </th>
-        <td mat-cell *matCellDef="let element">
-          {{formatearFecha(element.fechaeventoR)}} {{formatearHora(element.horaEventoR)}}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="c4">
-        <th mat-header-cell *matHeaderCellDef> Objeto </th>
-        <td mat-cell *matCellDef="let element">
-          <strong>{{objetos().get(element.idObjeto) ?? ('#' + element.idObjeto)}}</strong>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="c5">
-        <th mat-header-cell *matHeaderCellDef> Usuario </th>
-        <td mat-cell *matCellDef="let element">
-          {{usuarios().get(element.idUsuario) ?? ('#' + element.idUsuario)}}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="c6">
-        <th mat-header-cell *matHeaderCellDef> Estado </th>
-        <td mat-cell *matCellDef="let element">
-          <span class="chip chip-neutro">{{estados().get(element.idEstadoReporte) ?? ('#' + element.idEstadoReporte)}}</span>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="c7">
-        <th mat-header-cell *matHeaderCellDef> Acciones </th>
-        <td mat-cell *matCellDef="let element">
-          @if (lS.esAdminOStaff()){
-            <button matIconButton class="btn-eliminar" (click)="eliminarReporte(element)" aria-label="Eliminar reporte">
-              <mat-icon>delete</mat-icon>
-            </button>
-          }
-        </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      <tr class="mat-row" *matNoDataRow>
-        <td class="sin-datos" [attr.colspan]="displayedColumns.length">
-          @if (cargando()) {
-            Cargando reportes...
-          } @else if (tipoSeleccionado() === 'TODOS') {
-            No hay reportes activos registrados
-          } @else {
-            No existen reportes activos de tipo "{{ tipoSeleccionado() }}"
-          }
-        </td>
-      </tr>
-    </table>
-  </div>
+    <div class="tabla-wrap">
+        <table mat-table [dataSource]="dataSource" class="tabla">
+
+            <ng-container matColumnDef="c1">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.idReporte}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c2">
+                <th mat-header-cell *matHeaderCellDef> Tipo </th>
+                <td mat-cell *matCellDef="let element">
+                    <span class="chip" [class.chip-perdido]="esPerdido(element.tipoReporte)"
+                        [class.chip-encontrado]="!esPerdido(element.tipoReporte)">
+                        {{element.tipoReporte}}
+                    </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c3">
+                <th mat-header-cell *matHeaderCellDef> Fecha y hora del evento </th>
+                <td mat-cell *matCellDef="let element">
+                    {{formatearFecha(element.fechaeventoR)}} {{formatearHora(element.horaEventoR)}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c4">
+                <th mat-header-cell *matHeaderCellDef> Objeto </th>
+                <td mat-cell *matCellDef="let element">
+                    <strong>{{objetos().get(element.idObjeto) ?? ('#' + element.idObjeto)}}</strong>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c5">
+                <th mat-header-cell *matHeaderCellDef> Usuario </th>
+                <td mat-cell *matCellDef="let element">
+                    {{usuarios().get(element.idUsuario) ?? ('#' + element.idUsuario)}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c6">
+                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                <td mat-cell *matCellDef="let element">
+                    <span class="chip chip-neutro">{{estados().get(element.idEstadoReporte) ?? ('#' + element.idEstadoReporte)}}</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="c7">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let element">
+                    @if (lS.esAdminOStaff()){
+                     <button matIconButton class="btn-eliminar" (click)="eliminarReporte(element)" aria-label="Eliminar reporte">
+                         <mat-icon>delete</mat-icon>
+                     </button>
+                    }
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="sin-datos" [attr.colspan]="displayedColumns.length">No hay reportes registrados</td>
+            </tr>
+        </table>
+    </div>
 </div>

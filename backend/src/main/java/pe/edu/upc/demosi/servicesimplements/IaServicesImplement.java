@@ -39,16 +39,17 @@ public class IaServicesImplement implements IIaService {
             .connectTimeout(Duration.ofSeconds(15))
             .build();
 
-    @Value("${huggingface.token:}")
+    // ===== Gemini (Google AI Studio) =====
+    @Value("${gemini.api-key:}")
     private String token;
 
-    @Value("${huggingface.url:https://router.huggingface.co}")
+    @Value("${gemini.url:https://generativelanguage.googleapis.com/v1beta}")
     private String baseUrl;
 
-    @Value("${huggingface.modelo-vision:Qwen/Qwen2.5-VL-7B-Instruct}")
+    @Value("${gemini.modelo-vision:gemini-3.5-flash-lite}")
     private String modeloVision;
 
-    @Value("${huggingface.modelo-embeddings:sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2}")
+    @Value("${gemini.modelo-embeddings:gemini-embedding-001}")
     private String modeloEmbeddings;
 
     public IaServicesImplement(IObjetoService oS) {
@@ -63,41 +64,48 @@ public class IaServicesImplement implements IIaService {
             return null; // sin foto o sin token: no se genera descripción
         }
         try {
-            // Formato OpenAI-compatible del router de Hugging Face (modelo de visión)
+            // La foto llega como "data:image/jpeg;base64,AAAA..." -> separar tipo y datos
+            String mime = "image/jpeg";
+            String datos = fotoBase64;
+            int coma = fotoBase64.indexOf(',');
+            if (fotoBase64.startsWith("data:") && coma > 0) {
+                mime = fotoBase64.substring(5, fotoBase64.indexOf(';'));
+                datos = fotoBase64.substring(coma + 1);
+            }
+
+            // Gemini generateContent: imagen + instrucción en un solo mensaje
             ObjectNode body = mapper.createObjectNode();
-            body.put("model", modeloVision);
-            body.put("max_tokens", 90);
-            ArrayNode messages = body.putArray("messages");
-            ObjectNode msg = messages.addObject();
-            msg.put("role", "user");
-            ArrayNode content = msg.putArray("content");
-            content.addObject()
-                    .put("type", "text")
-                    .put("text", "Eres el asistente de una oficina de objetos perdidos. "
-                            + "Describe en español, en una sola oración de máximo 25 palabras, el objeto principal "
-                            + "de la foto: qué es, color, marca visible y rasgos distintivos. No describas el fondo.");
-            ObjectNode img = content.addObject();
-            img.put("type", "image_url");
-            img.putObject("image_url").put("url", fotoBase64);
+            ArrayNode parts = body.putArray("contents").addObject().putArray("parts");
+            ObjectNode inline = parts.addObject().putObject("inline_data");
+            inline.put("mime_type", mime);
+            inline.put("data", datos);
+            parts.addObject().put("text", "Eres el asistente de una oficina de objetos perdidos. "
+                    + "Describe en español, en una sola oración de máximo 25 palabras, el objeto principal "
+                    + "de la foto: qué es, color, marca visible y rasgos distintivos. No describas el fondo. "
+                    + "Responde solo con la oración.");
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/v1/chat/completions"))
+                    .uri(URI.create(baseUrl + "/models/" + modeloVision + ":generateContent"))
                     .timeout(Duration.ofSeconds(60))
-                    .header("Authorization", "Bearer " + token)
+                    .header("x-goog-api-key", token)
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(body)))
                     .build();
 
             HttpResponse<String> resp = http.send(request, HttpResponse.BodyHandlers.ofString());
             if (resp.statusCode() != 200) {
-                log.warn("Hugging Face (visión) respondió {}: {}", resp.statusCode(), resp.body());
+                log.warn("Gemini (visión) respondió {}: {}", resp.statusCode(), resp.body());
                 return null;
             }
-            String texto = mapper.readTree(resp.body())
-                    .path("choices").path(0).path("message").path("content").asText("").trim();
-            return texto.isEmpty() ? null : texto;
+            // Respuesta: candidates[0].content.parts[*].text
+            StringBuilder texto = new StringBuilder();
+            for (JsonNode part : mapper.readTree(resp.body()).path("candidates").path(0).path("content").path("parts")) {
+                texto.append(part.path("text").asText(""));
+            }
+            String r = texto.toString().trim();
+            return r.isEmpty() ? null : r;
         } catch (Exception e) {
-            log.warn("No se pudo describir la imagen con Hugging Face: {}", e.getMessage());
+            log.warn("No se pudo describir la imagen con Gemini: {}", e.getMessage());
             return null;
         }
     }
@@ -119,14 +127,14 @@ public class IaServicesImplement implements IIaService {
         String metodo;
         List<double[]> vectores = embeddings(texto, textosObjetos);
         if (vectores != null) {
-            // 1) Hugging Face convierte cada texto en un vector (embedding)
+            // 1) Gemini convierte cada texto en un vector (embedding)
             // 2) Smile calcula la similitud coseno entre el texto buscado y cada objeto
             double[] consulta = vectores.get(0);
             puntajes = new double[objetos.size()];
             for (int i = 0; i < objetos.size(); i++) {
                 puntajes[i] = Math.max(0, MathEx.cos(consulta, vectores.get(i + 1)));
             }
-            metodo = "IA (Hugging Face + Smile)";
+            metodo = "IA (Gemini + Smile)";
         } else {
             // Respaldo si no hay token o falla la API: % de palabras buscadas que aparecen en el objeto
             puntajes = new double[objetos.size()];
@@ -145,6 +153,36 @@ public class IaServicesImplement implements IIaService {
         return resultado.subList(0, Math.min(top, resultado.size()));
     }
 
+    // ================= Notificaciones: coincidencias automáticas =================
+
+    @Override
+    public Resultado compararObjetos(Objeto ancla, List<Objeto> otros, boolean anclaEsPerdido) {
+        double[] porcentajes = new double[otros.size()];
+        if (otros.isEmpty()) {
+            return new Resultado(porcentajes, "Texto (sin IA)");
+        }
+        String textoAncla = textoDelObjeto(ancla);
+        List<String> textos = otros.stream().map(this::textoDelObjeto).toList();
+
+        List<double[]> vectores = embeddings(textoAncla, textos);
+        if (vectores != null) {
+            for (int i = 0; i < otros.size(); i++) {
+                double c = Math.max(0, MathEx.cos(vectores.get(0), vectores.get(i + 1)));
+                porcentajes[i] = Math.round(c * 1000.0) / 10.0;
+            }
+            return new Resultado(porcentajes, "IA (Gemini + Smile)");
+        }
+
+        // Sin IA: % de palabras del objeto PERDIDO que aparecen en el ENCONTRADO
+        Set<String> tAncla = tokens(textoAncla);
+        for (int i = 0; i < otros.size(); i++) {
+            Set<String> tOtro = tokens(textos.get(i));
+            double c = anclaEsPerdido ? cobertura(tAncla, tOtro) : cobertura(tOtro, tAncla);
+            porcentajes[i] = Math.round(c * 1000.0) / 10.0;
+        }
+        return new Resultado(porcentajes, "Texto (sin IA)");
+    }
+
     // Todo lo que describe al objeto en un solo texto
     private String textoDelObjeto(Objeto o) {
         StringBuilder sb = new StringBuilder();
@@ -157,7 +195,7 @@ public class IaServicesImplement implements IIaService {
         return sb.toString();
     }
 
-    // Llama a Hugging Face (feature-extraction). Posición 0 = texto buscado.
+    // Llama a Gemini (batchEmbedContents). Posición 0 = texto buscado.
     private List<double[]> embeddings(String consulta, List<String> textos) {
         if (token == null || token.isBlank()) {
             return null;
@@ -167,31 +205,39 @@ public class IaServicesImplement implements IIaService {
             todos.add(consulta);
             todos.addAll(textos);
 
-            ObjectNode body = mapper.createObjectNode();
-            ArrayNode inputs = body.putArray("inputs");
-            todos.forEach(inputs::add);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/hf-inference/models/" + modeloEmbeddings + "/pipeline/feature-extraction"))
-                    .timeout(Duration.ofSeconds(60))
-                    .header("Authorization", "Bearer " + token)
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(body)))
-                    .build();
-
-            HttpResponse<String> resp = http.send(request, HttpResponse.BodyHandlers.ofString());
-            if (resp.statusCode() != 200) {
-                log.warn("Hugging Face (embeddings) respondió {}: {}", resp.statusCode(), resp.body());
-                return null;
-            }
-            JsonNode json = mapper.readTree(resp.body());
             List<double[]> vectores = new ArrayList<>();
-            for (JsonNode item : json) {
-                vectores.add(aVector(item));
+            // Gemini acepta hasta 100 textos por llamada
+            for (int desde = 0; desde < todos.size(); desde += 100) {
+                List<String> lote = todos.subList(desde, Math.min(desde + 100, todos.size()));
+                ObjectNode body = mapper.createObjectNode();
+                ArrayNode requests = body.putArray("requests");
+                for (String t : lote) {
+                    ObjectNode r = requests.addObject();
+                    r.put("model", "models/" + modeloEmbeddings);
+                    r.putObject("content").putArray("parts").addObject().put("text", t);
+                }
+
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(baseUrl + "/models/" + modeloEmbeddings + ":batchEmbedContents"))
+                        .timeout(Duration.ofSeconds(60))
+                        .header("x-goog-api-key", token)
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(body)))
+                        .build();
+
+                HttpResponse<String> resp = http.send(request, HttpResponse.BodyHandlers.ofString());
+                if (resp.statusCode() != 200) {
+                    log.warn("Gemini (embeddings) respondió {}: {}", resp.statusCode(), resp.body());
+                    return null;
+                }
+                // Respuesta: { "embeddings": [ { "values": [ ... ] }, ... ] }
+                for (JsonNode e : mapper.readTree(resp.body()).path("embeddings")) {
+                    vectores.add(aVector(e.path("values")));
+                }
             }
             return vectores.size() == todos.size() ? vectores : null;
         } catch (Exception e) {
-            log.warn("No se pudieron obtener embeddings de Hugging Face: {}", e.getMessage());
+            log.warn("No se pudieron obtener embeddings de Gemini: {}", e.getMessage());
             return null;
         }
     }

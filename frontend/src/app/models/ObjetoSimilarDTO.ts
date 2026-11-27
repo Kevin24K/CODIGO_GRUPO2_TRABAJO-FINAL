@@ -9,5 +9,5 @@ export class ObjetoSimilarDTO {
     marcaObjeto: string = '';
     fotoObjeto: string = '';
     porcentaje: number = 0;   // 0 a 100
-    metodo: string = '';      // "IA (Hugging Face + Smile)" o "Texto (sin IA)"
+    metodo: string = '';      // "IA (Gemini + Smile)" o "Texto (sin IA)"
 }

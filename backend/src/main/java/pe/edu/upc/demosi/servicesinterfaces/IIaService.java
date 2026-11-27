@@ -12,4 +12,10 @@ public interface IIaService {
 
     // HUF17: compara el texto de búsqueda con los objetos activos y los ordena por similitud
     List<ObjetoSimilarDTO> buscarSimilares(String texto, int top);
+
+    // Notificaciones: compara un objeto con varios (perdido vs encontrados o al revés).
+    // porcentajes[i] (0 a 100) corresponde a otros.get(i)
+    Resultado compararObjetos(Objeto ancla, List<Objeto> otros, boolean anclaEsPerdido);
+
+    record Resultado(double[] porcentajes, String metodo) {}
 }

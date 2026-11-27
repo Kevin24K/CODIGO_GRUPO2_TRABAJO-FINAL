@@ -23,6 +23,11 @@
             <h3>Reportes</h3>
             <p>Reportes de objetos perdidos y encontrados</p>
         </a>
+        <a mat-card class="acceso" routerLink="/notificaciones">
+            <mat-icon>notifications</mat-icon>
+            <h3>Notificaciones</h3>
+            <p>Avisos cuando aparece un objeto con 80 % o más de similitud</p>
+        </a>
         @if (lS.esAdmin()) {
             <a mat-card class="acceso" routerLink="/usuarios/listar">
                 <mat-icon>group</mat-icon>

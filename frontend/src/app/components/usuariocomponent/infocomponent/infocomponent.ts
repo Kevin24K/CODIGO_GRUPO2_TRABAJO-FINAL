@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { Barracomponents } from './barracomponents/barracomponents';
 import { Circularcomponents } from './circularcomponents/circularcomponents';
 import { Similitudbarracomponent } from './similitudbarracomponent/similitudbarracomponent';
@@ -9,4 +9,6 @@ import { Similitudbarracomponent } from './similitudbarracomponent/similitudbarr
   templateUrl: './infocomponent.html',
   styleUrl: './infocomponent.css',
 })
-export class Infocomponent {}
+export class Infocomponent {
+
+}

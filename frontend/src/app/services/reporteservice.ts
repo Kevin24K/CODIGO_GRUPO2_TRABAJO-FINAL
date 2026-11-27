@@ -9,7 +9,8 @@ import { TotalDTO } from './TotalDTO';
   providedIn: 'root',
 })
 export class Reporteservice {
-  private apiURL = `${environment.base}/api/Reportes`;
+
+  private apiURL = `${environment.base}/api/Reportes`
 
   constructor(private http: HttpClient) {}
 
@@ -31,13 +32,12 @@ export class Reporteservice {
   }
 
   insert(dto: ReporteDTO): Observable<ReporteDTO> {
-    return this.http.post<ReporteDTO>(this.apiURL, dto);
+    return this.http.post<ReporteDTO>(this.apiURL, dto)
   }
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiURL}/${id}`);
+    return this.http.delete<void>(`${this.apiURL}/${id}`)
   }
-
   getTotalByCategory(): Observable<TotalDTO[]> {
     return this.http.get<TotalDTO[]>(`${this.apiURL}/total-category`);
   }

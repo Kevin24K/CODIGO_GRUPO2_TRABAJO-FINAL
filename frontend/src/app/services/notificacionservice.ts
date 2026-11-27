@@ -1,30 +1,57 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, signal } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { NotificacionDTO, NotificacionInsertDTO } from '../models/NotificacionDTO';
+import { NotificacionDetalleDTO } from '../models/NotificacionDTO';
+import { Loginservice } from './loginservice';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Notificacionservice {
-  private apiURL = `${environment.base}/api/Notificaciones`;
 
-  constructor(private http: HttpClient) {}
+  private apiURL = `${environment.base}/api/Notificaciones`
 
-  getNotificaciones(): Observable<NotificacionDTO[]> {
-    return this.http.get<NotificacionDTO[]>(this.apiURL);
+  // Cantidad de no leídas que muestra la campanita del menú
+  noLeidas = signal(0)
+  private timer: ReturnType<typeof setInterval> | null = null
+
+  constructor(private http: HttpClient, private lS: Loginservice) {}
+
+  // El backend toma el correo del token; el parámetro sirve si la seguridad está apagada
+  private params(): HttpParams {
+    return new HttpParams().set('correo', this.lS.getCorreo())
   }
 
-  insert(dto: NotificacionInsertDTO): Observable<NotificacionInsertDTO> {
-    return this.http.post<NotificacionInsertDTO>(this.apiURL, dto);
+  getMias(): Observable<NotificacionDetalleDTO[]> {
+    return this.http.get<NotificacionDetalleDTO[]>(`${this.apiURL}/mias`, { params: this.params() }).pipe(
+      tap(lista => this.noLeidas.set(lista.filter(n => !n.leidaNotificacion).length))
+    )
   }
 
-  update(dto: NotificacionDTO): Observable<NotificacionDTO> {
-    return this.http.put<NotificacionDTO>(this.apiURL, dto);
+  marcarLeida(id: number): Observable<NotificacionDetalleDTO> {
+    return this.http.put<NotificacionDetalleDTO>(`${this.apiURL}/${id}/leida`, {}).pipe(
+      tap(() => this.noLeidas.update(n => Math.max(0, n - 1)))
+    )
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiURL}/${id}`);
+  marcarTodas(): Observable<{ cantidad: number }> {
+    return this.http.put<{ cantidad: number }>(`${this.apiURL}/mias/leidas`, {}, { params: this.params() }).pipe(
+      tap(() => this.noLeidas.set(0))
+    )
+  }
+
+  // Vuelve a contar las no leídas (por ejemplo, después de registrar un reporte)
+  refrescar() {
+    if (!this.lS.getCorreo()) return
+    this.http.get<{ cantidad: number }>(`${this.apiURL}/mias/no-leidas`, { params: this.params() })
+      .subscribe({ next: r => this.noLeidas.set(r.cantidad), error: () => {} })
+  }
+
+  // Revisa cada 30 segundos mientras la app está abierta
+  iniciarRevision() {
+    this.refrescar()
+    if (this.timer || typeof window === 'undefined') return
+    this.timer = setInterval(() => this.refrescar(), 30000)
   }
 }

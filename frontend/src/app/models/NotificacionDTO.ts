@@ -1,5 +1,5 @@
-// Lo que devuelve GET /api/Notificaciones y se envía en PUT /api/Notificaciones
-export class NotificacionDTO {
+// Notificaciones: respuesta de GET /api/Notificaciones/mias
+export class NotificacionDetalleDTO {
     idNotificacion: number = 0;
     tituloNotificacion: string = '';
     mensajeNotificacion: string = '';
@@ -20,4 +20,18 @@ export class NotificacionInsertDTO {
     fechaCreacionN: string = '';
     idUsuario: number = 0;
     idCoincidencia: number = 0;
+    porcentaje: number = 0;
+    estadoCoincidencia: string = '';
+    idReportePerdido: number = 0;
+    objetoPerdido: string = '';
+    idReporteEncontrado: number = 0;
+    idObjetoEncontrado: number = 0;
+    objetoEncontrado: string = '';
+    categoriaEncontrado: string = '';
+    descripcionEncontrado: string = '';
+    descripcionIaEncontrado: string = '';
+    colorEncontrado: string = '';
+    marcaEncontrado: string = '';
+    fotoEncontrado: string = '';
+    fechaEncontrado: string = '';
 }
