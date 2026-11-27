@@ -2,29 +2,26 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { UsuarioActivoDTO, UsuarioDTO, UsuarioInsertDTO } from '../models/UsuarioDTO';
+import { UsuarioDTO, UsuarioInsertDTO } from '../models/UsuarioDTO';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Usuarioservice {
-  private apiURL = `${environment.base}/api/Usuarios`;
+
+  private apiURL = `${environment.base}/api/Usuarios`
 
   constructor(private http: HttpClient) {}
 
   getUsuarios(): Observable<UsuarioDTO[]> {
-    return this.http.get<UsuarioDTO[]>(this.apiURL);
-  }
-
-  getActivos(): Observable<UsuarioActivoDTO[]> {
-    return this.http.get<UsuarioActivoDTO[]>(`${this.apiURL}/activos`);
+    return this.http.get<UsuarioDTO[]>(this.apiURL)
   }
 
   insert(dto: UsuarioInsertDTO): Observable<UsuarioInsertDTO> {
-    return this.http.post<UsuarioInsertDTO>(this.apiURL, dto);
+    return this.http.post<UsuarioInsertDTO>(this.apiURL, dto)
   }
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiURL}/${id}`);
+    return this.http.delete<void>(`${this.apiURL}/${id}`)
   }
 }

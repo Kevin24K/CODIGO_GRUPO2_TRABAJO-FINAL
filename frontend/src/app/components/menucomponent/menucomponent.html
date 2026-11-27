@@ -20,14 +20,16 @@
     <mat-menu #menuReporte="matMenu">
         <button mat-menu-item routerLink="/reportes/listar"><mat-icon>list</mat-icon>Listar</button>
         <button mat-menu-item routerLink="/reportes/insertar"><mat-icon>add</mat-icon>Registrar</button>
-        <button mat-menu-item routerLink="/reportes/Informacion"><mat-icon>info</mat-icon>Informe</button>
     </mat-menu>
+
+    <button matButton routerLink="/buscar"><mat-icon>travel_explore</mat-icon> Buscar objeto</button>
 
     @if (lS.esAdmin()) {
         <button matButton [matMenuTriggerFor]="menuUsuario">Usuarios</button>
         <mat-menu #menuUsuario="matMenu">
             <button mat-menu-item routerLink="/usuarios/listar"><mat-icon>list</mat-icon>Listar</button>
             <button mat-menu-item routerLink="/usuarios/insertar"><mat-icon>add</mat-icon>Registrar</button>
+            <button mat-menu-item routerLink="/usuarios/informacion"><mat-icon>bar_chart</mat-icon>Información</button>
         </mat-menu>
 
         <button matButton [matMenuTriggerFor]="menuCoincidencia">Coincidencias</button>
@@ -37,6 +39,14 @@
         </mat-menu>
     }
 
+    <button matButton [matMenuTriggerFor]="menuNotificacion">Notificaciones</button>
+    <mat-menu #menuNotificacion="matMenu">
+        <button mat-menu-item routerLink="/notificaciones/listar"><mat-icon>list</mat-icon>Listar</button>
+        @if (lS.esAdminOStaff()) {
+            <button mat-menu-item routerLink="/notificaciones/insertar"><mat-icon>add</mat-icon>Registrar</button>
+        }
+    </mat-menu>
+
     <span class="espacio"></span>
 
     <button matButton [matMenuTriggerFor]="menuCuenta" class="cuenta">
@@ -44,6 +54,9 @@
         <span class="correo">{{ lS.getCorreo() }}</span>
     </button>
     <mat-menu #menuCuenta="matMenu">
+        @if (lS.esAdmin()) {
+            <button mat-menu-item routerLink="/usuarios/informacion"><mat-icon>bar_chart</mat-icon>Información</button>
+        }
         <button mat-menu-item (click)="cerrarSesion()"><mat-icon>logout</mat-icon>Cerrar sesión</button>
     </mat-menu>
 </mat-toolbar>

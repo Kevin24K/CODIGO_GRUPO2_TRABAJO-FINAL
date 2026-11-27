@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ReporteDTO } from '../models/ReporteDTO';
-import { TotalDTO } from '../models/TotalDTO';
+import { TotalDTO } from './TotalDTO';
 
 @Injectable({
   providedIn: 'root',

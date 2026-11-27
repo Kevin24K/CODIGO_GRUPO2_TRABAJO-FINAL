@@ -1,17 +1,27 @@
 <div class="page">
     <div class="page-header">
         <h2><mat-icon>inventory_2</mat-icon> Lista de Objetos</h2>
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <button matButton="outlined" type="button" (click)="toggleSoloActivos()">
-                <mat-icon>{{ soloActivos() ? 'filter_alt_off' : 'filter_alt' }}</mat-icon>
-                {{ soloActivos() ? 'Ver todos' : 'Solo activos' }}
-            </button>
-            <a matButton="filled" routerLink="/objetos/insertar"><mat-icon>add</mat-icon> Registrar objeto</a>
-        </div>
+        <a matButton="filled" routerLink="/objetos/insertar"><mat-icon>add</mat-icon> Registrar objeto</a>
     </div>
 
     <div class="tabla-wrap">
         <table mat-table [dataSource]="dataSource" class="tabla">
+
+            <!-- HUF18: miniatura de la foto comprimida -->
+            <ng-container matColumnDef="c0">
+                <th mat-header-cell *matHeaderCellDef> Foto </th>
+                <td mat-cell *matCellDef="let element">
+                    @if (element.fotoObjeto) {
+                        <button class="mini" type="button" (click)="verFoto(element)" aria-label="Ver foto">
+                            <img [src]="element.fotoObjeto" alt="Foto de {{element.nombreObjeto}}" loading="lazy">
+                        </button>
+                    } @else {
+                        <button matIconButton (click)="subirFoto(element)" matTooltip="Agregar foto" aria-label="Agregar foto">
+                            <mat-icon>add_a_photo</mat-icon>
+                        </button>
+                    }
+                </td>
+            </ng-container>
 
             <ng-container matColumnDef="c1">
                 <th mat-header-cell *matHeaderCellDef> ID </th>
@@ -57,6 +67,9 @@
             <ng-container matColumnDef="c8">
                 <th mat-header-cell *matHeaderCellDef> Acciones </th>
                 <td mat-cell *matCellDef="let element">
+                    <button matIconButton (click)="subirFoto(element)" matTooltip="{{ element.fotoObjeto ? 'Cambiar foto' : 'Agregar foto' }}" aria-label="Agregar o cambiar foto">
+                        <mat-icon>photo_camera</mat-icon>
+                    </button>
                     <button matIconButton class="btn-eliminar" (click)="eliminarObjeto(element)" aria-label="Eliminar objeto">
                         <mat-icon>delete</mat-icon>
                     </button>

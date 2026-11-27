@@ -8,7 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CoincidenciaDTO } from '../../../models/CoincidenciaDTO';
-import { EstadoCoincidenciaDTO } from '../../../models/EstadoCoincidenciaDTO';
+import { EstadoCoincidenciaDTO } from '../../..//models/EstadoCoincidenciaDTO';
 import { Coincidenciaservice } from '../../../services/coincidenciaservice';
 import { Estadocoincidenciaservice } from '../../../services/estadocoincidenciaservice';
 
