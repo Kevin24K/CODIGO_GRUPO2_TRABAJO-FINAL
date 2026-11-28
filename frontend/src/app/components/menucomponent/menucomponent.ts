@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
+import { Component ,OnInit,signal} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {NotificacionDetalleDTO} from '../../models/NotificacionDTO';
+import {Notificacionservice} from '../../services/notificacionservice';
+import { Pushservice } from '../../services/pushservice';
 import { Loginservice } from '../../services/loginservice';
 
 @Component({

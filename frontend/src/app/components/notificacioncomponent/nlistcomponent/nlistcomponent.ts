@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NotificacionDTO } from '../../../models/NotificacionDTO';
+import { NotificacionDetalleDTO } from '../../../models/NotificacionDTO';
 import { Notificacionservice } from '../../../services/notificacionservice';
 import { Usuarioservice } from '../../../services/usuarioservice';
 import { Loginservice } from '../../../services/loginservice';
@@ -26,9 +26,9 @@ import { Loginservice } from '../../../services/loginservice';
 })
 export class Nlistcomponent implements OnInit {
   displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9'];
-  dataSource: MatTableDataSource<NotificacionDTO> = new MatTableDataSource<NotificacionDTO>();
+  dataSource: MatTableDataSource<NotificacionDetalleDTO> = new MatTableDataSource<NotificacionDetalleDTO>();
 
-  todas = signal<NotificacionDTO[]>([]);
+  todas = signal<NotificacionDetalleDTO[]>([]);
   usuarios = signal(new Map<number, string>());
   soloNoLeidas = signal(false);
 
@@ -78,8 +78,8 @@ export class Nlistcomponent implements OnInit {
       : lista;
   }
 
-  alternarLeida(n: NotificacionDTO) {
-    const actualizada: NotificacionDTO = {
+  alternarLeida(n: NotificacionDetalleDTO) {
+    const actualizada: NotificacionDetalleDTO = {
       ...n,
       leidaNotificacion: !n.leidaNotificacion,
     };
@@ -99,7 +99,7 @@ export class Nlistcomponent implements OnInit {
     });
   }
 
-  eliminarNotificacion(n: NotificacionDTO) {
+  eliminarNotificacion(n: NotificacionDetalleDTO) {
     if (!confirm(`¿Eliminar la notificación "${n.tituloNotificacion}"?`)) return;
     this.nS.delete(n.idNotificacion).subscribe({
       next: () => {

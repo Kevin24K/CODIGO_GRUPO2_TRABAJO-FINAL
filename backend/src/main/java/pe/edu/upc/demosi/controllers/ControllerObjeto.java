@@ -14,6 +14,7 @@ import pe.edu.upc.demosi.dtos.BusquedaTextoDTO;
 import pe.edu.upc.demosi.dtos.ObjetoCategoriaDTCList;
 import pe.edu.upc.demosi.entities.Categoria;
 import pe.edu.upc.demosi.entities.Objeto;
+import pe.edu.upc.demosi.servicesinterfaces.ICoincidenciaAutomaticaService;
 import pe.edu.upc.demosi.servicesinterfaces.ICategoriaService;
 import pe.edu.upc.demosi.servicesinterfaces.IIaService;
 import pe.edu.upc.demosi.servicesinterfaces.IObjetoService;

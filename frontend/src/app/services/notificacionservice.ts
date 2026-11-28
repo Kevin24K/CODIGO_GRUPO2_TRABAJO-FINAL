@@ -3,6 +3,7 @@ import { Injectable, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { NotificacionDetalleDTO } from '../models/NotificacionDTO';
+import { NotificacionInsertDTO } from '../models/NotificacionDTO';
 import { Loginservice } from './loginservice';
 
 @Injectable({
@@ -22,7 +23,18 @@ export class Notificacionservice {
   private params(): HttpParams {
     return new HttpParams().set('correo', this.lS.getCorreo())
   }
-
+  insert(dto: NotificacionInsertDTO): Observable<NotificacionInsertDTO> {
+      return this.http.post<NotificacionInsertDTO>(this.apiURL, dto)
+  }
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiURL}/${id}`);
+  }
+    update(dto: NotificacionDetalleDTO): Observable<NotificacionDetalleDTO> {
+    return this.http.put<NotificacionDetalleDTO>(this.apiURL, dto);
+  }
+    getNotificaciones(): Observable<NotificacionDetalleDTO[]> {
+    return this.http.get<NotificacionDetalleDTO[]>(this.apiURL);
+  }
   getMias(): Observable<NotificacionDetalleDTO[]> {
     return this.http.get<NotificacionDetalleDTO[]>(`${this.apiURL}/mias`, { params: this.params() }).pipe(
       tap(lista => this.noLeidas.set(lista.filter(n => !n.leidaNotificacion).length))

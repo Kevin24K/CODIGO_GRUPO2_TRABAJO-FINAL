@@ -5,9 +5,22 @@ export class NotificacionDetalleDTO {
     mensajeNotificacion: string = '';
     tipoNotificacion: string = '';
     leidaNotificacion: boolean = false;
-    fechaCreacionN: string = ''; // LocalDateTime -> "2026-11-26T19:45:00"
-    idUsuario: number = 0;
+    fechaCreacionN: string = '';
     idCoincidencia: number = 0;
+    porcentaje: number = 0;
+    estadoCoincidencia: string = '';
+    idReportePerdido: number = 0;
+    objetoPerdido: string = '';
+    idReporteEncontrado: number = 0;
+    idObjetoEncontrado: number = 0;
+    objetoEncontrado: string = '';
+    categoriaEncontrado: string = '';
+    descripcionEncontrado: string = '';
+    descripcionIaEncontrado: string = '';
+    colorEncontrado: string = '';
+    marcaEncontrado: string = '';
+    fotoEncontrado: string = '';
+    fechaEncontrado: string = '';
 }
 
 // Lo que se envía en POST /api/Notificaciones (NotificacionDTCinsert)

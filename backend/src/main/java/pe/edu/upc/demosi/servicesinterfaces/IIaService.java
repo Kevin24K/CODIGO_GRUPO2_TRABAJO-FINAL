@@ -1,6 +1,7 @@
 package pe.edu.upc.demosi.servicesinterfaces;
 
 import pe.edu.upc.demosi.dtos.ObjetoSimilarDTO;
+import pe.edu.upc.demosi.entities.Objeto;
 
 import java.util.List;
 
