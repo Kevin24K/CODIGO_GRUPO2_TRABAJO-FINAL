@@ -14,6 +14,7 @@ import { Usuariocomponent } from './components/usuariocomponent/usuariocomponent
 import { Ulistcomponent } from './components/usuariocomponent/ulistcomponent/ulistcomponent';
 import { Uinsertcomponent } from './components/usuariocomponent/uinsertcomponent/uinsertcomponent';
 import { Busquedacomponent } from './components/busquedacomponent/busquedacomponent';
+import { Landingcomponent } from './components/landingcomponent/landingcomponent';
 import { authGuard,adminGuard } from './guards/authguard';
 import { Infocomponent } from './components/usuariocomponent/infocomponent/infocomponent';
 import { Coincidenciacomponent } from './components/coincidenciacomponent/coincidenciacomponent';
@@ -27,6 +28,11 @@ export const routes: Routes = [
         path: 'login',
         component: Logincomponent
     },
+     {
+        path: '', // Landing pública
+        component: Landingcomponent,
+        pathMatch: 'full'
+    },
     {
         path: '',
         component: Homecomponent,
@@ -39,6 +45,7 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'listar', pathMatch: 'full' },
             { path: 'listar', component: Catlistcomponent },
+            {path:'insertar',component:Catinsertcomponent}
         ]
     },
     {
