@@ -12,7 +12,7 @@ public class ObjetoSimilarDTO {
     private String marcaObjeto;
     private String fotoObjeto;
     private double porcentaje;   // 0 a 100
-    private String metodo;       // "IA (Hugging Face + Smile)" o "Texto (sin IA)"
+    private String metodo;       // "IA (Gemini + Smile)" o "Texto (sin IA)"
 
     public Long getIdObjeto() { return idObjeto; }
     public void setIdObjeto(Long idObjeto) { this.idObjeto = idObjeto; }

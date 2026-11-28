@@ -15,6 +15,7 @@ import { Objetoservice } from '../../../services/objetoservice';
 import { Estadoreporteservice } from '../../../services/estadoreporteservice';
 import { Usuarioservice } from '../../../services/usuarioservice';
 import { Loginservice } from '../../../services/loginservice';
+import { Notificacionservice } from '../../../services/notificacionservice';
 import { ObjetoDTO } from '../../../models/ObjetoDTO';
 import { EstadoReporteDTO } from '../../../models/EstadoReporteDTO';
 import { UsuarioDTO } from '../../../models/UsuarioDTO';
@@ -40,7 +41,7 @@ export class Rinsertcomponent implements OnInit {
 
   constructor(private fb: FormBuilder, private rS: Reporteservice, private oS: Objetoservice,
     private eS: Estadoreporteservice, private uS: Usuarioservice, private lS: Loginservice,
-    private router: Router, private snack: MatSnackBar) {
+    private router: Router, private snack: MatSnackBar, private nS: Notificacionservice) {
     this.form = this.fb.group({
       tipoReporte: ['PERDIDO', Validators.required],
       fechaeventoR: [new Date(), Validators.required],
@@ -80,7 +81,12 @@ export class Rinsertcomponent implements OnInit {
     this.guardando.set(true)
     this.rS.insert(r).subscribe({
       next: () => {
-        this.snack.open('Reporte registrado', 'OK', { duration: 2500 })
+        // Notificaciones: el backend ya comparó este reporte con los del tipo contrario
+        this.nS.refrescar()
+        const msj = v.tipoReporte === 'PERDIDO'
+          ? 'Reporte registrado. Te avisaremos si aparece un objeto con 80 % o más de similitud.'
+          : 'Reporte registrado. Si se parece a un objeto perdido, avisaremos a su dueño.'
+        this.snack.open(msj, 'OK', { duration: 4000 })
         this.router.navigate(['/reportes/listar'])
       },
       error: (err) => {

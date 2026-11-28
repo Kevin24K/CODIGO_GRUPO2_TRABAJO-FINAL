@@ -14,15 +14,24 @@ import { Usuariocomponent } from './components/usuariocomponent/usuariocomponent
 import { Ulistcomponent } from './components/usuariocomponent/ulistcomponent/ulistcomponent';
 import { Uinsertcomponent } from './components/usuariocomponent/uinsertcomponent/uinsertcomponent';
 import { Busquedacomponent } from './components/busquedacomponent/busquedacomponent';
+import { Landingcomponent } from './components/landingcomponent/landingcomponent';
 import { authGuard,adminGuard } from './guards/authguard';
 import { Infocomponent } from './components/usuariocomponent/infocomponent/infocomponent';
 import { Coincidenciacomponent } from './components/coincidenciacomponent/coincidenciacomponent';
 import { Clistcomponent } from './components/coincidenciacomponent/clistcomponent/clistcomponent';
 import { Cinsertcomponent } from './components/coincidenciacomponent/cinsertcomponent/cinsertcomponent';
+import { Notificacioncomponent } from './components/notificacioncomponent/notificacioncomponent';
+import { Nlistcomponent } from './components/notificacioncomponent/nlistcomponent/nlistcomponent';
+import { Ninsertcomponent } from './components/notificacioncomponent/ninsertcomponent/ninsertcomponent';
 export const routes: Routes = [
     {
         path: 'login',
         component: Logincomponent
+    },
+     {
+        path: '', // Landing pública
+        component: Landingcomponent,
+        pathMatch: 'full'
     },
     {
         path: '',
@@ -36,6 +45,7 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'listar', pathMatch: 'full' },
             { path: 'listar', component: Catlistcomponent },
+            {path:'insertar',component:Catinsertcomponent}
         ]
     },
     {
@@ -83,6 +93,16 @@ export const routes: Routes = [
         path: 'buscar', // HUF17: búsqueda de coincidencias por descripción
         component: Busquedacomponent,
         canActivate: [authGuard],
+    },
+    {
+        path: 'notificaciones',
+        component: Notificacioncomponent,
+        canActivate: [authGuard],
+        children: [
+            { path: '', redirectTo: 'listar', pathMatch: 'full' },
+            { path: 'listar', component: Nlistcomponent },
+            { path: 'insertar', component: Ninsertcomponent },
+        ]
     },
     {
         path: '**',

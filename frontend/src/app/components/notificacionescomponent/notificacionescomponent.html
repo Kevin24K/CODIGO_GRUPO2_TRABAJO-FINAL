@@ -1,0 +1,89 @@
+<app-menucomponent></app-menucomponent>
+
+<div class="page">
+    <div class="page-header">
+        <h2><mat-icon>notifications</mat-icon> Mis notificaciones</h2>
+        @if (hayNoLeidas()) {
+            <button matButton="outlined" (click)="marcarTodas()"><mat-icon>done_all</mat-icon> Marcar todas como leídas</button>
+        }
+    </div>
+
+    <!-- Guía: cómo funcionan las notificaciones -->
+    <mat-card class="guia">
+        <h3>¿Cómo funcionan las notificaciones?</h3>
+        <ol>
+            <li><strong>Reporta lo que perdiste:</strong> registra un reporte <em>PERDIDO</em> con la descripción de tu objeto (color, marca, detalles).</li>
+            <li><strong>El sistema compara:</strong> cada vez que seguridad registra un objeto <em>ENCONTRADO</em>, la IA compara su descripción (y la que generó de su foto) con tu reporte.</li>
+            <li><strong>Te avisamos:</strong> si la similitud es de <strong>80 % o más</strong>, te llega una notificación aquí, en la campanita del menú y como notificación push (Firebase).</li>
+        </ol>
+        <div class="guia-acciones">
+            <a matButton="filled" routerLink="/reportes/insertar"><mat-icon>add</mat-icon> Reportar objeto perdido</a>
+            <a matButton routerLink="/buscar"><mat-icon>travel_explore</mat-icon> Buscar ahora</a>
+        </div>
+    </mat-card>
+
+    <!-- Firebase Cloud Messaging: avisos aunque la página esté cerrada -->
+    <mat-card class="push">
+        <mat-icon class="push-icono">notifications_active</mat-icon>
+        <div class="push-texto">
+            <strong>Notificaciones push</strong>
+            @switch (pS.estado()) {
+                @case ('activo') { <span class="ok">Activadas en este navegador. Te avisaremos aunque tengas la página cerrada.</span> }
+                @case ('denegado') { <span class="mal">Bloqueaste las notificaciones. Actívalas desde el candado de la barra de direcciones.</span> }
+                @case ('no-soportado') { <span class="mal">Este navegador no admite notificaciones push.</span> }
+                @case ('sin-config') { <span class="mal">Falta la configuración de Firebase en <code>environment.ts</code>.</span> }
+                @case ('error') { <span class="mal">No se pudieron activar. Revisa la configuración de Firebase y vuelve a intentar.</span> }
+                @default { <span>Recibe un aviso en tu navegador o celular apenas aparezca una coincidencia.</span> }
+            }
+        </div>
+        @if (pS.estado() !== 'activo' && pS.estado() !== 'no-soportado') {
+            <button matButton="filled" (click)="activarPush()" [disabled]="activando()">
+                {{ activando() ? 'Activando...' : 'Activar' }}
+            </button>
+        }
+    </mat-card>
+
+    @if (cargando()) {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    } @else if (error()) {
+        <p class="vacio">{{ error() }}</p>
+    } @else {
+        <div class="lista">
+            @for (n of lista(); track n.idNotificacion) {
+                <mat-card class="item" [class.no-leida]="!n.leidaNotificacion">
+                    @if (n.fotoEncontrado) {
+                        <button type="button" class="foto" (click)="verFoto(n)" aria-label="Ver foto del objeto encontrado">
+                            <img [src]="n.fotoEncontrado" alt="Foto de {{ n.objetoEncontrado }}" loading="lazy">
+                        </button>
+                    } @else {
+                        <div class="foto sin-foto"><mat-icon>image_not_supported</mat-icon></div>
+                    }
+                    <div class="info">
+                        <div class="titulo">
+                            @if (!n.leidaNotificacion) { <span class="punto" aria-label="No leída"></span> }
+                            <strong>{{ n.tituloNotificacion }}</strong>
+                        </div>
+                        <p class="mensaje">{{ n.mensajeNotificacion }}</p>
+                        @if (n.descripcionIaEncontrado) {
+                            <p class="desc-ia"><mat-icon>auto_awesome</mat-icon> {{ n.descripcionIaEncontrado }}</p>
+                        }
+                        <div class="chips">
+                            @if (n.categoriaEncontrado) { <span class="chip chip-neutro">{{ n.categoriaEncontrado }}</span> }
+                            @if (n.estadoCoincidencia) { <span class="chip chip-neutro">{{ n.estadoCoincidencia }}</span> }
+                            <span class="fecha">{{ n.fechaCreacionN | date: 'dd/MM/yyyy HH:mm' }}</span>
+                        </div>
+                    </div>
+                    <div class="lado">
+                        <span class="pct">{{ n.porcentaje }} %</span>
+                        <span class="pct-label">similitud</span>
+                        @if (!n.leidaNotificacion) {
+                            <button matButton (click)="marcarLeida(n)">Marcar como leída</button>
+                        }
+                    </div>
+                </mat-card>
+            } @empty {
+                <p class="vacio">Todavía no tienes notificaciones. Cuando aparezca un objeto parecido a lo que reportaste, lo verás aquí.</p>
+            }
+        </div>
+    }
+</div>

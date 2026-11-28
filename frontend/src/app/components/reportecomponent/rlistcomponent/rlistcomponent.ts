@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReporteDTO } from '../../../models/ReporteDTO';
 import { Reporteservice } from '../../../services/reporteservice';

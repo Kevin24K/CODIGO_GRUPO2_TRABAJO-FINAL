@@ -1,0 +1,20 @@
+<div class="chart-card">
+  @if (cargando) {
+    <p class="mensaje-estado" role="status">Cargando suma de similitud por estado...</p>
+  } @else if (mensajeError) {
+    <p class="mensaje-estado" role="status">{{ mensajeError }}</p>
+  } @else if (sinDatos) {
+    <p class="mensaje-estado" role="status">
+      No existen coincidencias registradas para calcular la suma de similitud por estado.
+    </p>
+  } @else {
+    <div class="chart-box">
+      <canvas
+        baseChart
+        [data]="chartData"
+        [options]="chartOptions"
+        [type]="chartType">
+      </canvas>
+    </div>
+  }
+</div>
